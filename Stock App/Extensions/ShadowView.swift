@@ -9,13 +9,16 @@
 import Foundation
 import UIKit
 
+/// UIView with shadow Bezier Path
 class ShadowView: UIView {
+    
+    /// When bounds are set, we update Shadows
     override var bounds: CGRect {
         didSet {
             setupShadow()
         }
     }
-    
+    /// Setting up shadow
     private func setupShadow() {
         self.layer.cornerRadius = 8
         self.layer.shadowColor = UIColor.white.cgColor

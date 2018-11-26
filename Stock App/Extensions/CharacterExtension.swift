@@ -9,6 +9,7 @@
 import Foundation
 
 extension Character {
+    ///Checks if Character Is in Upper Case
     func isUpper() -> Bool {
         if (self >= Character("A") && self <= Character("Z")) {
             return true

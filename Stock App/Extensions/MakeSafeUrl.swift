@@ -9,7 +9,8 @@
 import Foundation
 
 extension String {
-    func makeSafeUrl()->String {
+    /// Replaces http with https in String, representing URL
+    func makeSafeUrl() -> String {
         if (self.contains("http")) {
             return self.replacingOccurrences(of: "http:", with: "https:")
         }

@@ -12,6 +12,7 @@ private let reuseIdentifier = "Cell"
 
 class NewsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
+    /// NewsItem DataSource
     var news = [NewsItem]()
     
     override func viewDidLoad() {
@@ -74,7 +75,7 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
     }
     
     //MARK:- Working with API
-    
+    /// Fetching Data From newsriver.io
     func fetchNews() {
         /*let ans : Data = APIHelper.shared.GetNews()
         do {

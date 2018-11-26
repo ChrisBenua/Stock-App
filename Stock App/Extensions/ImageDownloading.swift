@@ -10,8 +10,15 @@ import Foundation
 import UIKit
 
 extension UIImage {
+    
+    /**
+     Downloads Image Asynchronously
+     
+     - Parameter urlStr : String, representing needed URL
+     - Parameter imageView : ImageView, where to assign downloaded Image
+    */
     static func downloadImage(urlStr : String, imageView : UIImageView) {
-            guard let url = URL(string: urlStr) else { return }
+        guard let url = URL(string: urlStr.makeSafeUrl()) else { return }
         
         URLSession.shared.dataTask(with: url) { (data, response, err) in
             //check for the error, then construct the image using data

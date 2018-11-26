@@ -9,7 +9,7 @@
 import UIKit
 
 class NewsCollectionViewCell: UICollectionViewCell {
-    
+    /// Store corresponding NewsItem
     var newsItem : NewsItem! {
         didSet {
             titleTextLabel.text = newsItem.title
@@ -19,7 +19,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
             UIImage.downloadImage(urlStr: newsItem.nestedElems[0].url, imageView: imageView)
         }
     }
-    
+    /// Label for title in CollectionViewCell
     let titleTextLabel : PaddingLabel = {
         let label = PaddingLabel(padding: UIEdgeInsets(top: 1, left: 4, bottom: 1, right: 2))
         label.textColor = UIColor.white
@@ -31,7 +31,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
         label.clipsToBounds = true
         return label
     }()
-    
+    /// Label for text in CollectionView
     let previewTextLabel : PaddingLabel = {
         let label = PaddingLabel(padding: UIEdgeInsets(top: 1, left: 4, bottom: 1, right: 2))
         //label.text = "ipsum dolor amet"
@@ -45,20 +45,18 @@ class NewsCollectionViewCell: UICollectionViewCell {
         //label.backgroundColor = UIColor.lightGray
         return label
     }()
-    
+    /// Cornered analog for ContentView
     let mainCellView : UIView = {
         let iv = UIView()
-        iv.backgroundColor = UIColor.mainCellBackgroundColor()
         iv.clipsToBounds = true
-        iv.layer.cornerRadius = 8
         return iv
     }()
-    
+    /// View with shadows, below all views in cells
     let shadowView : ShadowView = {
         let view = ShadowView()
         return view
     }()
-    
+    /// Image View for displaying content Image
     let imageView : UIImageView = {
         let iv = UIImageView()
         iv.clipsToBounds = true
@@ -67,10 +65,10 @@ class NewsCollectionViewCell: UICollectionViewCell {
         return iv
     }()
     
+    ///Configure layer of mainCellView
     func layerSetUp() {
         mainCellView.layer.cornerRadius = 8
         mainCellView.backgroundColor = UIColor.mainCellBackgroundColor()
-
     }
     
     override func awakeFromNib() {
@@ -84,7 +82,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
         shadowView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
         
         contentView.addSubview(mainCellView)
-        
+        layerSetUp()
         mainCellView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
         
         mainCellView.addSubview(imageView)

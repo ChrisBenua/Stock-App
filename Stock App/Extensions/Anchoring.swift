@@ -10,6 +10,20 @@ import Foundation
 import UIKit
 
 extension UIView {
+    
+    /**
+        Anchoring object of UIView to Top Left Bottom Right
+     - Parameter top: set view's topAnchor to top, Optional
+     - Parameter left: set view's leftAnchor to left, Optional
+     - Parameter bottom: set view's bottomAnchor to bottom, Optional
+     - Parameter right: set view's topAnchor to right, Optional
+     - Parameter paddingTop: padding constant from topAnchor
+     - Parameter paddingLeft: padding constant from leftAnchor
+     - Parameter paddingBottom: padding constant from bottomAnchor
+     - Parameter paddingRight: padding constant from rightAnchor
+     - Parameter height: if one of Top or Bottom anchors isn't set, you have to set height explicitly
+     - Parameter width: id one of Left or Right anchor isn't set, you have to set width explicitly
+    */
     func anchor(top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?,  paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false

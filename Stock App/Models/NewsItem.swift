@@ -7,8 +7,9 @@
 //
 
 import Foundation
-
+/// Class for parsing Result from API
 public class SearchResults : Decodable {
+    ///Array of NewsItems to parse from API
     var elements : [NewsItem]
     
     init() {
@@ -33,21 +34,26 @@ public class SearchResults : Decodable {
         }
     }
 }
-
+/// One element from API response
 public class NewsItem : Decodable {
+    /// Id of News Record
     var id : String
-    var publishDate : String
+    /// Time, when News were discovered by newsriver
+    var discoveryDate : String
+    /// title for corresponding news item
     var title : String
+    /// plain text without attributes
     var text : String
-    
+    /// URL to news' source
     var externalUrl : String
     //var nestedElems : NestedElementArray
+    /// Images and others elements nested in `elements` tag
     var nestedElems : [NestedElement]
     
     
     init() {
         id = ""
-        publishDate = ""
+        discoveryDate = ""
         title = ""
         text = ""
         externalUrl = ""
@@ -57,7 +63,7 @@ public class NewsItem : Decodable {
     
     init(id : String, publishDate : String, title : String, text : String, externalUrl : String) {
         self.id = id
-        self.publishDate = publishDate
+        self.discoveryDate = publishDate
         self.title = title
         self.text = text
         self.externalUrl = externalUrl
@@ -67,7 +73,7 @@ public class NewsItem : Decodable {
     
     init(id : String, publishDate : String, title : String, text : String, externalUrl : String, nestedElems : [NestedElement]) {
         self.id = id
-        self.publishDate = publishDate
+        self.discoveryDate = publishDate
         self.title = title
         self.text = text
         self.externalUrl = externalUrl
@@ -79,7 +85,7 @@ public class NewsItem : Decodable {
         do {
             let container = try aDecoder.container(keyedBy : CodingKeys.self)
             self.id = try container.decode(String.self, forKey: .id)
-            self.publishDate = try container.decode(String.self, forKey: .publishDate)
+            self.discoveryDate = try container.decode(String.self, forKey: .discoveryDate)
             self.title = try container.decode(String.self, forKey: .title)
             self.text = try container.decode(String.self, forKey: .text)
             self.externalUrl = try container.decode(String.self, forKey: .externalUrl)
@@ -88,7 +94,7 @@ public class NewsItem : Decodable {
             //self.nestedElems = try container.decode(NestedElementArray.self, forKey: .nestedElems)
         } catch let err {
             id = ""
-            publishDate = ""
+            discoveryDate = ""
             title = ""
             text = ""
             externalUrl = ""
@@ -101,16 +107,19 @@ public class NewsItem : Decodable {
     
     enum CodingKeys : String, CodingKey {
         case id = "id"
-        case publishDate = "discoverDate"
+        case discoveryDate = "discoverDate"
         case title = "title"
         case text = "text"
         case externalUrl = "url"
         case nestedElems = "elements"
     }
 }
-
+/// Class for parsing and stroing `elements` tag in API response
 class NestedElement : Decodable {
+    /// type of content elem
     var type : String
+    
+    /// URL, repsresenting source URL of this element
     var url : String
     
     enum CodingKeys : String, CodingKey {
@@ -141,8 +150,9 @@ class NestedElement : Decodable {
         }
     }
 }
-
+///class for parsing array of `elements` tag
 class NestedElementArray : Decodable {
+    /// array of elements in `elements` tag
     var elements : [NestedElement]
     
     init() {
