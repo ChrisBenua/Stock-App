@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2EE6F14E8CDF0B6BD9A810C5 /* libPods-Stock App.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECC102B10E04D094F4FFE1C5 /* libPods-Stock App.a */; };
+		5A2F3A30637EF8B35645CA31 /* Pods_Stock_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B583595EF11E4FC436EE022D /* Pods_Stock_App.framework */; };
 		AA51A92221AB450F00A8A83F /* LabelWithInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA51A92121AB450F00A8A83F /* LabelWithInsets.swift */; };
 		AA51A92421AB593400A8A83F /* CharacterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA51A92321AB593400A8A83F /* CharacterExtension.swift */; };
 		AA51A92621AC120C00A8A83F /* MakeSafeUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA51A92521AC120C00A8A83F /* MakeSafeUrl.swift */; };
@@ -49,7 +49,7 @@
 		AAB157A521AB27940048966A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		AAB157A821AB316B0048966A /* APIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHelper.swift; sourceTree = "<group>"; };
 		AAB157AA21AB37A50048966A /* ImageDownloading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloading.swift; sourceTree = "<group>"; };
-		ECC102B10E04D094F4FFE1C5 /* libPods-Stock App.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Stock App.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B583595EF11E4FC436EE022D /* Pods_Stock_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stock_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EE6F14E8CDF0B6BD9A810C5 /* libPods-Stock App.a in Frameworks */,
+				5A2F3A30637EF8B35645CA31 /* Pods_Stock_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,7 +159,7 @@
 		E90C4A1CD9611E02B13F9BFB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ECC102B10E04D094F4FFE1C5 /* libPods-Stock App.a */,
+				B583595EF11E4FC436EE022D /* Pods_Stock_App.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -175,6 +175,7 @@
 				AA71063F21AB067D0036067D /* Sources */,
 				AA71064021AB067D0036067D /* Frameworks */,
 				AA71064121AB067D0036067D /* Resources */,
+				63AC1B6848E613B19A40DF37 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -232,6 +233,30 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		63AC1B6848E613B19A40DF37 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Stock App/Pods-Stock App-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Stock App/Pods-Stock App-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		803C7ED5A67A6866BD9EB609 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class NewsCollectionViewCell: UICollectionViewCell {
     /// Store corresponding NewsItem
@@ -14,9 +15,17 @@ class NewsCollectionViewCell: UICollectionViewCell {
         didSet {
             titleTextLabel.text = newsItem.title
             previewTextLabel.text = newsItem.text
-            //UIImage.downloadImage(urlStr: newsItem.externalUrl, imageView: imageView)
-            newsItem.nestedElems[0].url = newsItem.nestedElems[0].url.makeSafeUrl()
-            UIImage.downloadImage(urlStr: newsItem.nestedElems[0].url, imageView: imageView)
+            //guard let URL = URL(string: newsItem.externalUrl.makeSafeUrl()) else { return }
+
+            /*imageView.sd_setImage(with: URL) { (image, err, _, _) in
+                if let err = err {
+                    print(err)
+                }
+            }*/
+            if (newsItem.nestedElems.count > 0) {
+                guard let URL = URL(string: newsItem.nestedElems[0].url) else { return }
+                imageView.sd_setImage(with: URL, completed: nil)
+            }
         }
     }
     /// Label for title in CollectionViewCell

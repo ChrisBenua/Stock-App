@@ -9,11 +9,15 @@
 import Foundation
 
 extension String {
-    /// Replaces http with https in String, representing URL
+    /// Replaces http with https and deletes www in String, representing URL
     func makeSafeUrl() -> String {
+        var curr : String = self
         if (self.contains("http")) {
-            return self.replacingOccurrences(of: "http:", with: "https:")
+            curr = self.replacingOccurrences(of: "http:", with: "https:")
         }
-        return self
+        /*if (self.contains("www.")) {
+            return curr.replacingOccurrences(of: "www.", with: "")
+        }*/
+        return curr
     }
 }

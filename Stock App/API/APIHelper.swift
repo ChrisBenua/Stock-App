@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import Alamofire
 
 class APIHelper {
     
     static var shared = APIHelper()
     
-    static var QueryURL = "https://api.newsriver.io/v2/search/"
+    static var QueryURL = "https://api.newsriver.io/v2/search?"
     //for testing
     /*static let json = """
     {
@@ -169,7 +170,7 @@ class APIHelper {
         return ans.elements*/
         print(APIHelper.json.prefix(7061))
         do {
-            var newsItem = try JSONDecoder().decode(NewsItem.self, from: APIHelper.json.data(using: .utf8)!)
+            let newsItem = try JSONDecoder().decode(NewsItem.self, from: APIHelper.json.data(using: .utf8)!)
             newsItem.externalUrl = newsItem.externalUrl.makeSafeUrl()
             return [newsItem]
         } catch let err {
@@ -177,4 +178,39 @@ class APIHelper {
             return [NewsItem]()
         }
     }
+    
+    
+    func fetchAllNews(params : [String : Any], completionHandler: @escaping (_ : [NewsItem]) -> ()) {
+        let headers : HTTPHeaders = [
+            "Authorization" : "sBBqsGXiYgF0Db5OV5tAw3To7PPsmyRAgIa73y4U1x2URrasZJ5GlR1abYpo_jlNn2pHZrSf1gT2PUujH1YaQA"
+        ]
+        var parsedParams : String = ""
+        
+        for el in params.keys {
+            parsedParams += el
+            parsedParams += ":"
+            parsedParams += params[el] as! String
+            parsedParams += " AND "
+        }
+        parsedParams = String(parsedParams.prefix(parsedParams.count - 5))
+        Alamofire.request(APIHelper.QueryURL,
+                          method: .get,
+                          parameters: ["query" : parsedParams], headers: headers)
+            .responseJSON { (resp) in
+                let dict = resp.result.value as! [[String : Any]]
+                var items : [NewsItem] = [NewsItem]()
+                do {
+                    for el in dict {
+                        let data : Data = try JSONSerialization.data(withJSONObject : el)
+                        items.append(try JSONDecoder().decode(NewsItem.self, from: data))
+                    }
+                    completionHandler(items)
+                } catch let err {
+                    print(err)
+                }
+                print(resp.result.value)
+        }
+        
+    }
 }
+

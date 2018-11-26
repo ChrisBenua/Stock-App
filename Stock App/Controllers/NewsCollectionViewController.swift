@@ -85,7 +85,12 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         } catch let err {
             print("Error while fetching data", err)
         }*/
-        news = APIHelper.shared.GetNews()
-        collectionView.reloadData()
+        //news = APIHelper.shared.GetNews()
+        //collectionView.reloadData()
+        
+        APIHelper.shared.fetchAllNews(params: ["text" : "Apple", "language" : "EN"], completionHandler: { (res) in
+            self.news = res
+            self.collectionView.reloadData()
+        })
     }
 }
