@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-
+/// APIHelper for newsriver
 class APIHelper {
     
     static var shared = APIHelper()

@@ -25,6 +25,11 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         // Register cell classes
         self.collectionView!.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         fetchNews()
+        
+        //Just for test
+        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : "BTC_XMR", "start" : "1405699200", "end" : "1405728000", "period" : "14400"]) { (coinDataArr) in
+            
+        }
         // Do any additional setup after loading the view.
     }
 
