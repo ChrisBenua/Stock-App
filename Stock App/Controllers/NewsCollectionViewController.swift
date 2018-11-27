@@ -61,6 +61,12 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         return cell
     }
 
+    //opening link, corresponding to news in browser
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let url = URL(string: news[indexPath.row].externalUrl) else { return }
+        UIApplication.shared.open(url, options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly : false], completionHandler: nil)
+    }
+    
     //MARK:- UICollectionViewDelegateFlowLayOut
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 10
