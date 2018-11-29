@@ -11,7 +11,18 @@ import UIKit
 private let reuseIdentifier = "Cell"
 
 class NewsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    ///Activity indicator
+    let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
 
+    ///Add it to searchbar not to spam queries
+    var timer : Timer?
+    
+    ///If there is nothing found on query
+    var foundedZero = false
+    
+    ///SearchController for searching news
+    let searchController = UISearchController(searchResultsController: nil)
+    
     /// NewsItem DataSource
     var news = [NewsItem]()
     
@@ -24,6 +35,9 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
 
         // Register cell classes
         self.collectionView!.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        
+        setUpSearchBar()
+        
         fetchNews()
         
         //Just for test
@@ -85,9 +99,11 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         return 10
     }
     
+    
+    
     //MARK:- Working with API
     /// Fetching Data From newsriver.io
-    func fetchNews() {
+    func fetchNews(text : String = "Apple") {
         /*let ans : Data = APIHelper.shared.GetNews()
         do {
             let res = try JSONDecoder().decode(SearchResults.self, from: ans)
@@ -99,9 +115,50 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         //news = APIHelper.shared.GetNews()
         //collectionView.reloadData()
         
-        APIHelper.shared.fetchAllNews(params: ["text" : "Apple", "language" : "EN"], completionHandler: { (res) in
+        AddActivityIndicator()
+        APIHelper.shared.fetchAllNews(luceneParams: ["text" : text, "website.domainName" : "(bloomberg.com OR marketwatch.com)"], luceneLogicParams: ["AND"], simpleParams: ["sortBy" : "discoverDate", "sortOrder" : "DESC"], completionHandler: { (res) in
             self.news = res
             self.collectionView.reloadData()
+            self.removeActivityIndicator()
         })
+    }
+}
+
+//MARK:- SearchBarDelegate
+extension NewsCollectionViewController : UISearchBarDelegate {
+    
+    
+    ///Set Search Bar fields
+    fileprivate func setUpSearchBar() {
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Enter text to search"
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+            self.fetchNews(text: searchText)
+        })
+    }
+    
+}
+
+//MARK:- ActivityIndocator
+///Show and hide activity indicator
+extension NewsCollectionViewController {
+    fileprivate func AddActivityIndicator() {
+        self.news = [NewsItem]()
+        collectionView.reloadData()
+        self.view.addSubview(activityIndicator)
+        activityIndicator.frame.origin.y = 40 + (navigationController?.navigationBar.frame.height ?? 0) + (searchController.searchBar.frame.height)//40 because of status bar and uncollapsing bar
+        //center it
+        activityIndicator.frame.origin.x = view.frame.width / 2 - activityIndicator.frame.width / 2
+        activityIndicator.startAnimating()
+    }
+    fileprivate func removeActivityIndicator() {
+        activityIndicator.stopAnimating()
+        activityIndicator.removeFromSuperview()
     }
 }
