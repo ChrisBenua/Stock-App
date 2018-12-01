@@ -22,7 +22,7 @@ class ShadowView: UIView {
     private func setupShadow() {
         self.layer.cornerRadius = 8
         self.layer.shadowColor = UIColor.white.cgColor
-        self.layer.shadowOffset = CGSize(width: 1.5, height: 3)
+        self.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
         self.layer.shadowRadius = 3
         self.layer.shadowOpacity = 0.15
         self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 8, height: 8)).cgPath

@@ -27,4 +27,8 @@ extension UIColor {
     static func mainBlackColor() -> UIColor {
         return UIColor(red: 12/255, green: 27/255, blue: 27/255, alpha: 1.0)
     }
+    ///Color for tabbar Color
+    static func mainTabBarColor() -> UIColor {
+        return UIColor(red: 5/255, green: 5/255, blue: 5/255, alpha: 1.0)
+    }
 }

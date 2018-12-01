@@ -26,16 +26,22 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
     /// NewsItem DataSource
     var news = [NewsItem]()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         collectionView.backgroundColor = UIColor.mainBlackColor()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
+        self.navigationController?.navigationBar.barStyle = .black
+        self.collectionView!.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.navigationController?.navigationBar.topItem?.title = "News"
+        //Because of tabbar
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         setUpSearchBar()
         
         fetchNews()
