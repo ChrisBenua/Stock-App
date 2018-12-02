@@ -47,9 +47,9 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         fetchNews()
         
         //Just for test
-        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : "BTC_XMR", "start" : "1405699200", "end" : "1405728000", "period" : "14400"]) { (coinDataArr) in
+        //PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : "BTC_XMR", "start" : "1405699200", "end" : "1405728000", "period" : "14400"]) { (coinDataArr) in
             
-        }
+        //}
         // Do any additional setup after loading the view.
     }
 
@@ -120,9 +120,14 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         }*/
         //news = APIHelper.shared.GetNews()
         //collectionView.reloadData()
-        
+        var finalText : String
+        if (text.isEmpty) {
+            finalText = "Apple"
+        } else {
+            finalText = text
+        }
         AddActivityIndicator()
-        APIHelper.shared.fetchAllNews(luceneParams: ["text" : text, "website.domainName" : "(bloomberg.com OR marketwatch.com)"], luceneLogicParams: ["AND"], simpleParams: ["sortBy" : "discoverDate", "sortOrder" : "DESC"], completionHandler: { (res) in
+        APIHelper.shared.fetchAllNews(luceneParams: ["text" : finalText, "website.domainName" : "(bloomberg.com OR marketwatch.com OR cointelegraph.com)"], luceneLogicParams: ["AND"], simpleParams: ["sortBy" : "discoverDate", "sortOrder" : "DESC"], completionHandler: { (res) in
             self.news = res
             self.collectionView.reloadData()
             self.removeActivityIndicator()

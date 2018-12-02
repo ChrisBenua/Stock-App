@@ -29,18 +29,18 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         guard let items = tabBar.items else {return}
         for item in items {
-            item.imageInsets = UIEdgeInsets(top: 18, left: 0, bottom: -18, right: 0)
+            item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
         }
         // Do any additional setup after loading the view.
     }
     ///Setting up all nested controllers
     func setUpViewControllers() {
         let newsNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "newsUnselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "newsSelected").withRenderingMode(.alwaysOriginal), rootViewController: NewsCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout()))
-        
+        let currenciesNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "btcUnselected"), selectedImage: #imageLiteral(resourceName: "btcSelected"), rootViewController: MainCurrenciesController())
         //view.backgroundColor = .black
         //tabBar.isTranslucent = false
         self.moreNavigationController.navigationBar.tintColor = .black
-        viewControllers = [newsNavController]
+        viewControllers = [newsNavController, currenciesNavController]
     }
 
     
