@@ -74,7 +74,7 @@ class MainCurrenciesController : UIViewController {
         let timestamp = Int64.currentTimeStamp()
         for el in recentCoinsNames {
             var currentCoin : Coin = Coin()
-            PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-14400*2, "end" : timestamp, "period" : 14400]) { (data) in
+            PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-86400*2, "end" : timestamp, "period" : 86400]) { (data) in
                 currentCoin = Coin(name: el, data: data)
                 self.recentCurrencies.append(currentCoin)
                 self.recentlyUsedCollectionView.reloadData()

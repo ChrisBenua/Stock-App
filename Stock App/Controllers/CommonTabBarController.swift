@@ -36,7 +36,7 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
     ///Setting up all nested controllers
     func setUpViewControllers() {
         let newsNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "newsUnselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "newsSelected").withRenderingMode(.alwaysOriginal), rootViewController: NewsCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout()))
-        let currenciesNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "btcUnselected"), selectedImage: #imageLiteral(resourceName: "btcSelected"), rootViewController: MainCurrenciesController())
+        let currenciesNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "btcUnselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "btcSelected").withRenderingMode(.alwaysOriginal), rootViewController: MainCurrenciesController())
         //view.backgroundColor = .black
         //tabBar.isTranslucent = false
         self.moreNavigationController.navigationBar.tintColor = .black

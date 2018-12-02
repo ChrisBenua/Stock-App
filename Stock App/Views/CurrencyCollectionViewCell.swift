@@ -63,7 +63,7 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
         let currentTimeStamp = coin.data.last!.date//Unix time in milisecond
         var prevDayValue : Double = 0
         for el in coin.data {
-            if currentTimeStamp - el.date >= 14400 {
+            if currentTimeStamp - el.date >= 86400 {
                 prevDayValue = el.close
             }
         }
