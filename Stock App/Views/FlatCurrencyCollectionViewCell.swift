@@ -1,15 +1,16 @@
 //
-//  CurrencyCollectionViewCell.swift
+//  FlatCurrencyCollectionViewCell.swift
 //  Stock App
 //
-//  Created by Ирина Улитина on 02/12/2018.
+//  Created by Ирина Улитина on 04/12/2018.
 //  Copyright © 2018 Christian Benua. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class CurrencyCollectionViewCell : UICollectionViewCell {
+class FlatCurrencyCollectionViewCell : UICollectionViewCell {
+    
     static let cellId = "CellId"
     ///this coin's data should be represented in this cell somehow
     var coin : Coin! {
@@ -78,11 +79,6 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
         currentValueLabel.text = "\(String.init(format: "%.2f", todayValue)), \(String.init(format: "%.2f", todayValue/prevDayValue * 100 - 100))%"
     }
     
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -95,12 +91,15 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
         mainCellView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
         
         mainCellView.addSubview(nameLabel)
-        nameLabel.anchor(top: mainCellView.topAnchor, left: mainCellView.leftAnchor, bottom: nil, right: mainCellView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 10, width: 0, height: 35)
-        
         mainCellView.addSubview(currentValueLabel)
-        currentValueLabel.anchor(top: nil, left: mainCellView.leftAnchor, bottom: mainCellView.bottomAnchor, right: mainCellView.rightAnchor, paddingTop: 10, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 30)
+        
+        nameLabel.anchor(top: nil, left: mainCellView.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: 130, height: 35)
+        currentValueLabel.anchor(top: nil, left: nameLabel.rightAnchor, bottom: nil, right: mainCellView.rightAnchor, paddingTop: 0, paddingLeft: 30, paddingBottom: 0, paddingRight: 10, width: 0, height: 35)
+        nameLabel.centerYAnchor.constraint(equalTo: mainCellView.centerYAnchor)
+        currentValueLabel.centerYAnchor.constraint(equalTo: mainCellView.centerYAnchor)
+        nameLabel.textAlignment = .left
+        currentValueLabel.textAlignment = .right
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

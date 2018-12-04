@@ -17,8 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
         UITabBar.appearance().barTintColor = UIColor.mainBlackColor()
         UINavigationBar.appearance().prefersLargeTitles = true
+        
+        window = UIWindow()
+        window?.makeKeyAndVisible()
+        var tabBar = CommonTabBarController()
+        let nav = UINavigationController(rootViewController: tabBar)
+        nav.isNavigationBarHidden = true
+        nav.navigationBar.isUserInteractionEnabled = false
+        window?.rootViewController = nav
 
         return true
     }

@@ -43,4 +43,17 @@ class PoloniexAPIHelper {
         }
     }
     
+    static func fetchNames(completionHandler: @escaping (_ : [String]) -> ()) {
+        let params : [String : Any] = ["command" : "returnTicker"]
+        
+        Alamofire.request(QueryURL, method: .get, parameters: params, headers: nil).responseJSON { (response) in
+            let dict = response.result.value as! [String : Any]
+            var arr = [String]()
+            for el in dict.keys {
+                arr.append(el)
+            }
+            completionHandler(arr)
+        }
+    }
+    
 }

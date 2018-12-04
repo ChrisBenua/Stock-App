@@ -26,11 +26,16 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
     /// NewsItem DataSource
     var news = [NewsItem]()
     
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        PoloniexAPIHelper.fetchNames { (data) in
+            CoinSearchCollectionViewController.coinNames = data
+        }
+        
         collectionView.backgroundColor = UIColor.mainBlackColor()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -45,6 +50,8 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         setUpSearchBar()
         
         fetchNews()
+        
+        
         
         //Just for test
         //PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : "BTC_XMR", "start" : "1405699200", "end" : "1405728000", "period" : "14400"]) { (coinDataArr) in
@@ -153,6 +160,14 @@ extension NewsCollectionViewController : UISearchBarDelegate {
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
             self.fetchNews(text: searchText)
         })
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print("Began editing searchbar")
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        print("End editing")
     }
     
 }

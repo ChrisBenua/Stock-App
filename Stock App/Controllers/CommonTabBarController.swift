@@ -37,14 +37,24 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
     func setUpViewControllers() {
         let newsNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "newsUnselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "newsSelected").withRenderingMode(.alwaysOriginal), rootViewController: NewsCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout()))
         let currenciesNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "btcUnselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "btcSelected").withRenderingMode(.alwaysOriginal), rootViewController: MainCurrenciesController())
+        
+        let coinSearchController = templateNavController(unselectedImage: #imageLiteral(resourceName: "searchImageUnselected").withRenderingMode(.alwaysOriginal),
+                                                         selectedImage: #imageLiteral(resourceName: "searchImageSelected").withRenderingMode(.alwaysOriginal), rootViewController: CoinSearchCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout()))
         //view.backgroundColor = .black
         //tabBar.isTranslucent = false
         self.moreNavigationController.navigationBar.tintColor = .black
-        viewControllers = [newsNavController, currenciesNavController]
+        viewControllers = [newsNavController, currenciesNavController, coinSearchController]
     }
 
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if (tabBarController.selectedIndex == 0 || tabBarController.selectedIndex == 2) {
+            ((viewControllers![tabBarController.selectedIndex] as! UINavigationController).viewControllers.first! as! NewsCollectionViewController).searchController.isActive = false
+            /*print(searchBar.isFocused)
+            searchBar.resignFirstResponder()
+            print(searchBar.isFocused)*/
+            //sleep(2)
+        }
         return true
     }
     
