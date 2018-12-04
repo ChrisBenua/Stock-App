@@ -146,6 +146,7 @@ extension NewsCollectionViewController : UISearchBarDelegate {
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Enter text to search"
+        navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

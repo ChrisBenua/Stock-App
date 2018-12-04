@@ -5,10 +5,12 @@
 
 import Foundation
 import UIKit
+import Charts
 
 class MainCurrenciesController : UIViewController {
     /// We should fetch it from database(CoreData)
     var recentCurrencies = [Coin]()
+    var chart : LineChartView = LineChartView()
     
     let favoriteHeader : UILabel = {
        let label = UILabel()
@@ -21,10 +23,7 @@ class MainCurrenciesController : UIViewController {
 
     let graphView : UIView = {
         let view = UIView()
-        let imageView = UIImageView()
-        imageView.image = #imageLiteral(resourceName: "ViewForGraph")
-        view.addSubview(imageView)
-        imageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        view.backgroundColor = UIColor.mainBlackColor()
         return view
     }()
 
@@ -41,6 +40,7 @@ class MainCurrenciesController : UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.mainBlackColor()
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: CurrencyCollectionViewCell.cellId)
@@ -51,10 +51,29 @@ class MainCurrenciesController : UIViewController {
         super.viewDidLoad()
         layoutSetUp()
         fetchCoinsData()
+        fetchFavoriteCoinData(numberOfDays: 5)
     }
     
     ///All anchors and another stuff set up
     fileprivate func layoutSetUp() {
+        chart.gridBackgroundColor = UIColor.mainTextLabelColor()
+        chart.drawGridBackgroundEnabled = true
+        chart.backgroundColor = UIColor.mainTitleLabelColor()
+        chart.layer.cornerRadius = 16
+        chart.clipsToBounds = true
+        chart.autoScaleMinMaxEnabled = true
+        chart.xAxis.labelTextColor = .white
+        chart.leftAxis.labelTextColor = .white
+        chart.rightAxis.labelTextColor = .white
+        chart.xAxis.drawGridLinesEnabled = false
+        chart.leftAxis.drawGridLinesEnabled = false
+        chart.rightAxis.drawGridLinesEnabled = false
+        chart.xAxis.drawAxisLineEnabled = false
+        chart.leftAxis.drawAxisLineEnabled = false
+        chart.rightAxis.drawAxisLineEnabled = false
+        chart.xAxis.valueFormatter = TimestampToDateAxisValueFormatter()
+        
+        self.view.backgroundColor = UIColor.mainBlackColor()
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.topItem?.title = "All currencies"
@@ -62,10 +81,12 @@ class MainCurrenciesController : UIViewController {
         view.addSubview(graphView)
         view.addSubview(recentlyUsedLabel)
         view.addSubview(recentlyUsedCollectionView)
+        graphView.addSubview(chart)
         favoriteHeader.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 25, paddingBottom: 0, paddingRight: 3, width: 0, height: 40)
         graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 200)
         recentlyUsedLabel.anchor(top: graphView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 25, paddingBottom: 0, paddingRight: 20, width: 0, height: 40)
         recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 160)
+        chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
         //recentlyUsedCollectionView.layoutMargins.left = 20
     }
     
@@ -127,4 +148,25 @@ extension MainCurrenciesController : UICollectionViewDelegateFlowLayout {
     }
 }
 
-
+///MARK:- Charts
+extension  MainCurrenciesController {
+    func fetchFavoriteCoinData(numberOfDays : Int64) {
+        let name = String.getCoinsNames().first
+        let timestamp = Int64.currentTimeStamp()
+        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : name! as Any, "start" : timestamp-86400*(numberOfDays + 1), "end" : timestamp, "period" : 86400]) { (data) in
+            //currentCoin = Coin(name: name, data: data)
+            var arr : [ChartDataEntry] = [ChartDataEntry]()
+            for el in data {
+                arr.append(ChartDataEntry(x: Double(el.date), y: el.close))
+            }
+            
+            let dataSet : LineChartDataSet = LineChartDataSet(values: arr, label : name)
+            dataSet.setColor(UIColor.green)
+            dataSet.valueTextColor = .white
+            dataSet.circleRadius = 3
+            dataSet.fillColor = .black
+            let lineData = LineChartData(dataSet: dataSet)
+            self.chart.data = lineData
+        }
+    }
+}

@@ -15,8 +15,8 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
     var coin : Coin! {
         didSet {
             configureCurrentValueLabel()
-            var name = coin.name
-            let fifthIndex = String.Index(encodedOffset: 4)
+            let name = coin.name
+            let fifthIndex = String.Index(encodedOffset: 5)
             nameLabel.text = String(coin.name.suffix(from: fifthIndex))
         }
     }
@@ -75,7 +75,7 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
             currentValueLabel.textColor = UIColor.red
         }
         // formats like "123, +2%"
-        currentValueLabel.text = "\(String.init(format: "%.4f", todayValue)), \(String.init(format: "%.2f", todayValue/prevDayValue * 100 - 100))%"
+        currentValueLabel.text = "\(String.init(format: "%.2f", todayValue)), \(String.init(format: "%.2f", todayValue/prevDayValue * 100 - 100))%"
     }
     
     
