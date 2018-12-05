@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class NewsCollectionViewCell: UICollectionViewCell {
+class NewsCollectionViewCell: ShadowCollectionViewCellBase {
     /// Store corresponding NewsItem
     var newsItem : NewsItem! {
         didSet {
@@ -54,17 +54,6 @@ class NewsCollectionViewCell: UICollectionViewCell {
         //label.backgroundColor = UIColor.lightGray
         return label
     }()
-    /// Cornered analog for ContentView
-    let mainCellView : UIView = {
-        let iv = UIView()
-        iv.clipsToBounds = true
-        return iv
-    }()
-    /// View with shadows, below all views in cells
-    let shadowView : ShadowView = {
-        let view = ShadowView()
-        return view
-    }()
     /// Image View for displaying content Image
     let imageView : UIImageView = {
         let iv = UIImageView()
@@ -73,26 +62,10 @@ class NewsCollectionViewCell: UICollectionViewCell {
         
         return iv
     }()
-    
-    ///Configure layer of mainCellView
-    func layerSetUp() {
-        mainCellView.layer.cornerRadius = 8
-        mainCellView.backgroundColor = UIColor.mainCellBackgroundColor()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(shadowView)
-        
-        shadowView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
-        
-        contentView.addSubview(mainCellView)
-        layerSetUp()
-        mainCellView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
         
         mainCellView.addSubview(imageView)
         mainCellView.addSubview(titleTextLabel)

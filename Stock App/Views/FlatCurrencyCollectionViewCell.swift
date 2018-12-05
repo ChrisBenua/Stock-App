@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-class FlatCurrencyCollectionViewCell : UICollectionViewCell {
+class FlatCurrencyCollectionViewCell : ShadowCollectionViewCellBase {
     
-    static let cellId = "CellId"
     ///this coin's data should be represented in this cell somehow
     var coin : Coin! {
         didSet {
@@ -21,20 +20,6 @@ class FlatCurrencyCollectionViewCell : UICollectionViewCell {
             nameLabel.text = coin.name
         }
     }
-    
-    
-    /// Cornered analog for ContentView
-    let mainCellView : UIView = {
-        let iv = UIView()
-        iv.clipsToBounds = true
-        iv.backgroundColor = UIColor.mainCellBackgroundColor()
-        return iv
-    }()
-    /// View with shadows, below all views in cells
-    let shadowView : ShadowView = {
-        let view = ShadowView()
-        return view
-    }()
     
     ///Label for coin name
     let nameLabel : UILabel = {
@@ -53,12 +38,6 @@ class FlatCurrencyCollectionViewCell : UICollectionViewCell {
         
         return label
     }()
-    
-    ///Configure layer of mainCellView
-    func layerSetUp() {
-        mainCellView.layer.cornerRadius = 8
-        mainCellView.backgroundColor = UIColor.mainCellBackgroundColor()
-    }
     
     func configureCurrentValueLabel() {
         let currentTimeStamp = coin.data.last!.date//Unix time in milisecond
@@ -81,14 +60,6 @@ class FlatCurrencyCollectionViewCell : UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.addSubview(shadowView)
-        
-        shadowView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
-        
-        contentView.addSubview(mainCellView)
-        layerSetUp()
-        mainCellView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
         
         mainCellView.addSubview(nameLabel)
         mainCellView.addSubview(currentValueLabel)

@@ -85,7 +85,7 @@ class MainCurrenciesController : UIViewController {
         favoriteHeader.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 25, paddingBottom: 0, paddingRight: 3, width: 0, height: 40)
         graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 200)
         recentlyUsedLabel.anchor(top: graphView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 25, paddingBottom: 0, paddingRight: 20, width: 0, height: 40)
-        recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 160)
+        recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 170)
         chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
         //recentlyUsedCollectionView.layoutMargins.left = 20
     }
@@ -106,7 +106,11 @@ class MainCurrenciesController : UIViewController {
 
 //MARK:- UICollectionViewDelegate
 extension MainCurrenciesController : UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cv = CoinDetailViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        cv.coinName = recentCurrencies[indexPath.row].name
+        navigationController?.pushViewController(cv, animated: true)
+    }
 }
 
 //MARK:- UICollectionViewDataSource
@@ -140,7 +144,7 @@ extension MainCurrenciesController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 150, height: 150)
+        return CGSize(width: 160, height: 160)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

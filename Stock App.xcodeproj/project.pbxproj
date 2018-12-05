@@ -11,6 +11,11 @@
 		5A2F3A30637EF8B35645CA31 /* Pods_Stock_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B583595EF11E4FC436EE022D /* Pods_Stock_App.framework */; };
 		AA21538821ADD80600BDF69C /* PoloniexAPIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA21538721ADD80600BDF69C /* PoloniexAPIHelper.swift */; };
 		AA21538A21ADD9C900BDF69C /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA21538921ADD9C900BDF69C /* Coin.swift */; };
+		AA46153521B7AC9F005E093E /* CoinDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA46153421B7AC9F005E093E /* CoinDetailsViewController.swift */; };
+		AA46153721B7AFF7005E093E /* DetailCoinCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA46153621B7AFF7005E093E /* DetailCoinCollectionViewCell.swift */; };
+		AA46153921B7B065005E093E /* ShadowCollectionViewCellBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA46153821B7B065005E093E /* ShadowCollectionViewCellBase.swift */; };
+		AA46153B21B7BD1B005E093E /* MMddDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA46153A21B7BD1B005E093E /* MMddDateFormatter.swift */; };
+		AA46153D21B809D0005E093E /* DetailCoinControllerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA46153C21B809D0005E093E /* DetailCoinControllerHeader.swift */; };
 		AA51A92221AB450F00A8A83F /* LabelWithInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA51A92121AB450F00A8A83F /* LabelWithInsets.swift */; };
 		AA51A92421AB593400A8A83F /* CharacterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA51A92321AB593400A8A83F /* CharacterExtension.swift */; };
 		AA51A92621AC120C00A8A83F /* MakeSafeUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA51A92521AC120C00A8A83F /* MakeSafeUrl.swift */; };
@@ -43,6 +48,11 @@
 		49A16705141FDD260F62AF26 /* MainCurrenciesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCurrenciesController.swift; sourceTree = "<group>"; };
 		AA21538721ADD80600BDF69C /* PoloniexAPIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoloniexAPIHelper.swift; sourceTree = "<group>"; };
 		AA21538921ADD9C900BDF69C /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
+		AA46153421B7AC9F005E093E /* CoinDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinDetailsViewController.swift; sourceTree = "<group>"; };
+		AA46153621B7AFF7005E093E /* DetailCoinCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA46153821B7B065005E093E /* ShadowCollectionViewCellBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowCollectionViewCellBase.swift; sourceTree = "<group>"; };
+		AA46153A21B7BD1B005E093E /* MMddDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMddDateFormatter.swift; sourceTree = "<group>"; };
+		AA46153C21B809D0005E093E /* DetailCoinControllerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinControllerHeader.swift; sourceTree = "<group>"; };
 		AA51A92121AB450F00A8A83F /* LabelWithInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelWithInsets.swift; sourceTree = "<group>"; };
 		AA51A92321AB593400A8A83F /* CharacterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterExtension.swift; sourceTree = "<group>"; };
 		AA51A92521AC120C00A8A83F /* MakeSafeUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeSafeUrl.swift; sourceTree = "<group>"; };
@@ -135,6 +145,9 @@
 				AAB1579721AB237E0048966A /* NewsCollectionViewCell.swift */,
 				AAE7FF4821B433E500CDD1A6 /* CurrencyCollectionViewCell.swift */,
 				AA6ED2E421B6D4DE006F4411 /* FlatCurrencyCollectionViewCell.swift */,
+				AA46153621B7AFF7005E093E /* DetailCoinCollectionViewCell.swift */,
+				AA46153821B7B065005E093E /* ShadowCollectionViewCellBase.swift */,
+				AA46153C21B809D0005E093E /* DetailCoinControllerHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -155,6 +168,7 @@
 				AAB157A121AB250E0048966A /* CommonTabBarController.swift */,
 				49A16705141FDD260F62AF26 /* MainCurrenciesController.swift */,
 				AA6ED2E221B6D3E3006F4411 /* CoinSearchCollectionViewController.swift */,
+				AA46153421B7AC9F005E093E /* CoinDetailsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -173,6 +187,7 @@
 				AAE7FF4C21B43E0F00CDD1A6 /* CurrentTimeStamp.swift */,
 				AA6ED2E021B6CE4D006F4411 /* ChartXAxisValueFormatter.swift */,
 				AA6ED2E621B6D69E006F4411 /* ClearConstraints.swift */,
+				AA46153A21B7BD1B005E093E /* MMddDateFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -319,6 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA51A92621AC120C00A8A83F /* MakeSafeUrl.swift in Sources */,
+				AA46153921B7B065005E093E /* ShadowCollectionViewCellBase.swift in Sources */,
 				AA51A92421AB593400A8A83F /* CharacterExtension.swift in Sources */,
 				AA71064721AB067D0036067D /* AppDelegate.swift in Sources */,
 				AA6ED2E121B6CE4D006F4411 /* ChartXAxisValueFormatter.swift in Sources */,
@@ -334,13 +350,17 @@
 				AAB157A021AB240C0048966A /* NewsCollectionViewController.swift in Sources */,
 				AA71064F21AB067D0036067D /* Stock_App.xcdatamodeld in Sources */,
 				AA21538821ADD80600BDF69C /* PoloniexAPIHelper.swift in Sources */,
+				AA46153721B7AFF7005E093E /* DetailCoinCollectionViewCell.swift in Sources */,
 				AA6ED2E721B6D69E006F4411 /* ClearConstraints.swift in Sources */,
 				AA6ED2E521B6D4DE006F4411 /* FlatCurrencyCollectionViewCell.swift in Sources */,
 				AAB157A921AB316B0048966A /* APIHelper.swift in Sources */,
 				AAE7FF4B21B43C0600CDD1A6 /* CoinsNames.swift in Sources */,
 				AA51A92221AB450F00A8A83F /* LabelWithInsets.swift in Sources */,
 				AA21538A21ADD9C900BDF69C /* Coin.swift in Sources */,
+				AA46153521B7AC9F005E093E /* CoinDetailsViewController.swift in Sources */,
+				AA46153D21B809D0005E093E /* DetailCoinControllerHeader.swift in Sources */,
 				AAB1579821AB237E0048966A /* NewsCollectionViewCell.swift in Sources */,
+				AA46153B21B7BD1B005E093E /* MMddDateFormatter.swift in Sources */,
 				49A16386EED28D401EC289A6 /* MainCurrenciesController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

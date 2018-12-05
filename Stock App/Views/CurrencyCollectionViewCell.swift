@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-class CurrencyCollectionViewCell : UICollectionViewCell {
-    static let cellId = "CellId"
+class CurrencyCollectionViewCell : ShadowCollectionViewCellBase {
     ///this coin's data should be represented in this cell somehow
     var coin : Coin! {
         didSet {
@@ -20,20 +19,6 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
             nameLabel.text = coin.name
         }
     }
-    
-    
-    /// Cornered analog for ContentView
-    let mainCellView : UIView = {
-        let iv = UIView()
-        iv.clipsToBounds = true
-        iv.backgroundColor = UIColor.mainCellBackgroundColor()
-        return iv
-    }()
-    /// View with shadows, below all views in cells
-    let shadowView : ShadowView = {
-        let view = ShadowView()
-        return view
-    }()
     
     ///Label for coin name
     let nameLabel : UILabel = {
@@ -53,15 +38,9 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
         return label
     }()
     
-    ///Configure layer of mainCellView
-    func layerSetUp() {
-        mainCellView.layer.cornerRadius = 8
-        mainCellView.backgroundColor = UIColor.mainCellBackgroundColor()
-    }
-    
     func configureCurrentValueLabel() {
         let currentTimeStamp = coin.data.last!.date//Unix time in milisecond
-        var prevDayValue : Double = 0
+        var prevDayValue : Double = coin.data.last!.close
         for el in coin.data {
             if currentTimeStamp - el.date >= 86400 {
                 prevDayValue = el.close
@@ -78,21 +57,8 @@ class CurrencyCollectionViewCell : UICollectionViewCell {
         currentValueLabel.text = "\(String.init(format: "%.2f", todayValue)), \(String.init(format: "%.2f", todayValue/prevDayValue * 100 - 100))%"
     }
     
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.addSubview(shadowView)
-        
-        shadowView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
-        
-        contentView.addSubview(mainCellView)
-        layerSetUp()
-        mainCellView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
         
         mainCellView.addSubview(nameLabel)
         nameLabel.anchor(top: mainCellView.topAnchor, left: mainCellView.leftAnchor, bottom: nil, right: mainCellView.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 10, width: 0, height: 35)
