@@ -53,6 +53,8 @@ class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewContro
         chart.clipsToBounds = true
         chart.xAxis.drawAxisLineEnabled = false
         chart.xAxis.drawGridLinesEnabled = false
+        chart.xAxis.labelTextColor = .white
+        chart.xAxis.valueFormatter = TimestampToDateAxisValueFormatter()
         
         chart.leftAxis.drawGridLinesEnabled = false
         chart.leftAxis.drawAxisLineEnabled = false
@@ -62,6 +64,7 @@ class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewContro
         chart.rightAxis.drawGridLinesEnabled = false
         chart.rightAxis.drawZeroLineEnabled = false
         chart.rightAxis.drawAxisLineEnabled = false
+        chart.rightAxis.labelTextColor = .white
         
         chart.gridBackgroundColor = UIColor.mainTextLabelColor()
         chart.backgroundColor = UIColor.mainTitleLabelColor()
@@ -74,7 +77,7 @@ class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewContro
         
         contentView.addSubview(nameHeaderLabel)
         contentView.addSubview(chartView)
-        nameHeaderLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: nil, right: contentView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0)
+        nameHeaderLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: nil, right: contentView.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 0)
         chartView.anchor(top: nameHeaderLabel.bottomAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingBottom: 10, paddingRight: 20, width: 0, height: 0)
     }
     

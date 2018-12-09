@@ -13,7 +13,19 @@ import UIKit
 class CoinSearchCollectionViewController : UICollectionViewController {
     public static var coinNames = [String]()
     var allCoins : [Coin] = [Coin]()
-    var searchedCoins : [Coin] = [Coin]()
+    var alreadyFetched : [String : Coin] = [String : Coin]()
+    var searchedCoins : [Coin] = [Coin]() {
+        didSet {
+            
+        }
+    }
+    var searchedNames : [String]! {
+        didSet {
+            for el in searchedNames {
+                alreadyFetched[el] = Coin()
+            }
+        }
+    }
     
     let searchController = UISearchController(searchResultsController: nil)
     ///not to spam with queries, we will get banned
@@ -22,6 +34,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchedNames = CoinSearchCollectionViewController.coinNames
         collectionView.backgroundColor = UIColor.mainBlackColor()
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.topItem?.title = "Search"
@@ -33,7 +46,15 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         
     }
     
-    ///MARK:- UICollectiomViewDataSource
+    
+    //MARK:- UICollectionViewDelegate
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cv = CoinDetailViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        cv.coinName = searchedCoins[indexPath.row].name
+        navigationController?.pushViewController(cv, animated: true)
+    }
+    
+    //MARK:- UICollectiomViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -87,19 +108,26 @@ extension CoinSearchCollectionViewController : UISearchBarDelegate {
 //MARK:- API
 extension CoinSearchCollectionViewController {
     func fetchCoinsWithNames(text : String) {
-        var searchedNames = CoinSearchCollectionViewController.coinNames
-        searchedNames = searchedNames.filter({ (str) -> Bool in
+        var Names = self.searchedNames!
+        Names = Names.filter({ (str) -> Bool in
             return str.contains(text)
         })
         let timestamp = Int64.currentTimeStamp()
         searchedCoins.removeAll()
         collectionView.reloadData()
-        for el in searchedNames {
+        for el in Names {
             var currentCoin : Coin = Coin()
-            PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-86400*2, "end" : timestamp, "period" : 86400]) { (data) in
-                currentCoin = Coin(name: el, data: data)
-                self.searchedCoins.append(currentCoin)
+            if !alreadyFetched[el]!.name.isEmpty {
+                self.searchedCoins.append(alreadyFetched[el]!)
                 self.collectionView.reloadData()
+            } else {
+                PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-86400*2, "end" : timestamp, "period" : 86400]) { (data) in
+                    currentCoin = Coin(name: el, data: data)
+                    self.searchedCoins.append(currentCoin)
+                    self.alreadyFetched[el] = currentCoin
+                    self.collectionView.reloadData()
+                    
+                }
             }
         }
     }

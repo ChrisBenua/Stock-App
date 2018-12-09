@@ -48,12 +48,14 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        
         if (tabBarController.selectedIndex == 0 || tabBarController.selectedIndex == 2) {
-            ((viewControllers![tabBarController.selectedIndex] as! UINavigationController).viewControllers.first! as! NewsCollectionViewController).searchController.isActive = false
-            /*print(searchBar.isFocused)
-            searchBar.resignFirstResponder()
-            print(searchBar.isFocused)*/
-            //sleep(2)
+            var vc = ((viewControllers![tabBarController.selectedIndex] as! UINavigationController).viewControllers.first!)
+            if vc is NewsCollectionViewController {
+                (vc as! NewsCollectionViewController).searchController.isActive = false
+            } else if (vc is CoinSearchCollectionViewController) {
+                (vc as! CoinSearchCollectionViewController).searchController.isActive = false
+            }
         }
         return true
     }

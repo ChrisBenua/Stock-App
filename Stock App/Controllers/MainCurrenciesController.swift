@@ -59,8 +59,9 @@ class MainCurrenciesController : UIViewController {
         chart.gridBackgroundColor = UIColor.mainTextLabelColor()
         chart.drawGridBackgroundEnabled = true
         chart.backgroundColor = UIColor.mainTitleLabelColor()
-        chart.layer.cornerRadius = 16
+        chart.layer.cornerRadius = 8
         chart.clipsToBounds = true
+        chart.legend.textColor = .white
         chart.autoScaleMinMaxEnabled = true
         chart.xAxis.labelTextColor = .white
         chart.leftAxis.labelTextColor = .white
@@ -69,8 +70,10 @@ class MainCurrenciesController : UIViewController {
         chart.leftAxis.drawGridLinesEnabled = false
         chart.rightAxis.drawGridLinesEnabled = false
         chart.xAxis.drawAxisLineEnabled = false
-        chart.leftAxis.drawAxisLineEnabled = false
-        chart.rightAxis.drawAxisLineEnabled = false
+        //chart.leftAxis.drawAxisLineEnabled = false
+        //chart.rightAxis.drawAxisLineEnabled = false
+        chart.leftAxis.drawLabelsEnabled = false
+        
         chart.xAxis.valueFormatter = TimestampToDateAxisValueFormatter()
         
         self.view.backgroundColor = UIColor.mainBlackColor()
@@ -83,7 +86,7 @@ class MainCurrenciesController : UIViewController {
         view.addSubview(recentlyUsedCollectionView)
         graphView.addSubview(chart)
         favoriteHeader.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 25, paddingBottom: 0, paddingRight: 3, width: 0, height: 40)
-        graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 200)
+        graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 200)
         recentlyUsedLabel.anchor(top: graphView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 25, paddingBottom: 0, paddingRight: 20, width: 0, height: 40)
         recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 170)
         chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)

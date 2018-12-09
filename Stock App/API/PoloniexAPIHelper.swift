@@ -42,7 +42,9 @@ class PoloniexAPIHelper {
             }
         }
     }
-    
+    /**
+    Return all cryptoCurrencies, price is represented in some other currency
+    */
     static func fetchNames(completionHandler: @escaping (_ : [String]) -> ()) {
         let params : [String : Any] = ["command" : "returnTicker"]
         
