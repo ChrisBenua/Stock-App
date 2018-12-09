@@ -46,11 +46,17 @@ class MainCurrenciesController : UIViewController {
         collectionView.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: CurrencyCollectionViewCell.cellId)
         return collectionView
     }()
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchCoinsData()
+        fetchFavoriteCoinData(numberOfDays: 5)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSetUp()
-        fetchCoinsData()
+        //fetchCoinsData()
         fetchFavoriteCoinData(numberOfDays: 5)
     }
     
@@ -96,12 +102,22 @@ class MainCurrenciesController : UIViewController {
     func fetchCoinsData() {
         let recentCoinsNames = String.getCoinsNames()
         let timestamp = Int64.currentTimeStamp()
+        recentCurrencies = Array(repeating: Coin(), count: recentCoinsNames.count)
+        var places : [String : Int] = [String : Int]()
+        
+        for i in 0..<recentCoinsNames.count {
+            places[recentCoinsNames[i]] = i
+        }
+        var cnt = 0
         for el in recentCoinsNames {
             var currentCoin : Coin = Coin()
             PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-86400*2, "end" : timestamp, "period" : 86400]) { (data) in
                 currentCoin = Coin(name: el, data: data)
-                self.recentCurrencies.append(currentCoin)
-                self.recentlyUsedCollectionView.reloadData()
+                self.recentCurrencies[places[el]!] = currentCoin
+                cnt += 1
+                //if (cnt == self.recentCurrencies.count) {
+                    self.recentlyUsedCollectionView.reloadData()
+                //}
             }
         }
     }
@@ -158,7 +174,8 @@ extension MainCurrenciesController : UICollectionViewDelegateFlowLayout {
 ///MARK:- Charts
 extension  MainCurrenciesController {
     func fetchFavoriteCoinData(numberOfDays : Int64) {
-        let name = String.getCoinsNames().first
+        guard let nameArray = UserDefaults.standard.getFavoriteCoinNames() else { return }
+        let name = nameArray.first
         let timestamp = Int64.currentTimeStamp()
         PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : name! as Any, "start" : timestamp-86400*(numberOfDays + 1), "end" : timestamp, "period" : 86400]) { (data) in
             //currentCoin = Coin(name: name, data: data)

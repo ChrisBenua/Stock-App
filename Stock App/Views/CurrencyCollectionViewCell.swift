@@ -39,10 +39,10 @@ class CurrencyCollectionViewCell : ShadowCollectionViewCellBase {
     }()
     
     func configureCurrentValueLabel() {
-        let currentTimeStamp = coin.data.last!.date//Unix time in milisecond
+        guard let currentTimeStamp = coin.data.last else {return}//Unix time in milisecond
         var prevDayValue : Double = coin.data.last!.close
         for el in coin.data {
-            if currentTimeStamp - el.date >= 86400 {
+            if currentTimeStamp.date - el.date >= 86400 {
                 prevDayValue = el.close
             }
         }

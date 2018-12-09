@@ -13,7 +13,7 @@ class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
     
     var coinData : CoinData! {
         didSet {
-            dateLabel.text = DateFormatter.MMddDateFormatter().string(from: Date(timeIntervalSince1970: TimeInterval(coinData.date)))
+            dateLabel.text = DateFormatter.MMddDateFormatter(format : "MM-dd-yyyy").string(from: Date(timeIntervalSince1970: TimeInterval(coinData.date)))
             openLabel.text = "Open:\n \(String.init(format: "%.4f", coinData.open))"
             closeLabel.text = "Close:\n \(String.init(format: "%.4f", coinData.close))"
             lowLabel.text = "Low:\n \(String.init(format: "%.4f", coinData.low))"

@@ -13,7 +13,7 @@ import UIKit
 class TimestampToDateAxisValueFormatter : IAxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(value))
-        let strDate = DateFormatter.MMddDateFormatter().string(from: date)
+        let strDate = DateFormatter.MMddDateFormatter(format: "MM-dd").string(from: date)
         return strDate
     }
     

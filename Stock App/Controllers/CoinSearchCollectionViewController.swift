@@ -31,6 +31,15 @@ class CoinSearchCollectionViewController : UICollectionViewController {
     ///not to spam with queries, we will get banned
     var timer : Timer?
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Enter coin to search"
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +60,8 @@ class CoinSearchCollectionViewController : UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cv = CoinDetailViewController(collectionViewLayout: UICollectionViewFlowLayout())
         cv.coinName = searchedCoins[indexPath.row].name
+        searchController.isActive = false
+        navigationItem.searchController = nil
         navigationController?.pushViewController(cv, animated: true)
     }
     

@@ -11,6 +11,6 @@ import Foundation
 
 extension String {
     static func getCoinsNames() -> [String] {
-        return ["USDC_XMR", "USDC_ETH", "USDC_LTC", "USDC_BTC", "USDC_XRP"]
+        return UserDefaults.standard.getRecentCoinNames()
     }
 }

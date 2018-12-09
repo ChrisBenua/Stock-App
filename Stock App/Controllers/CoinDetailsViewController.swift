@@ -12,6 +12,8 @@ import Charts
 
 class CoinDetailViewController : UICollectionViewController {
     
+    private var isFavorite : Bool = false
+    
     var delegate : UpdateDetailsViewControllerDelegate?
     
     func setCoin(coin: Coin) {
@@ -31,16 +33,58 @@ class CoinDetailViewController : UICollectionViewController {
         }
     }
     
+    fileprivate func setUpBarButtons() {
+        let nameArray = UserDefaults.standard.getFavoriteCoinNames() ?? [String]()
+        if (nameArray.contains(coinName)) {
+            navigationItem.rightBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "starSelected").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(favoriteButtonPressed))]
+        } else {
+            navigationItem.rightBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "starUnselected").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(favoriteButtonPressed))]
+        }
+    }
+    
+    fileprivate func switchImage() {
+        if (isFavorite) {
+            navigationItem.rightBarButtonItems?.first?.image = UIImage(imageLiteralResourceName: "starUnselected").withRenderingMode(.alwaysOriginal)
+            isFavorite = false
+            UserDefaults.standard.eraseCoinNameFromFavorites(nameToErase: coinName)
+        } else {
+            navigationItem.rightBarButtonItems?.first?.image = UIImage(imageLiteralResourceName: "starSelected").withRenderingMode(.alwaysOriginal)
+            isFavorite = true
+            UserDefaults.standard.addToFavoritesCoinNames(newName: coinName)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //view.addSubview(scrollView)
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationItem.title = coinName
+        //self.navigationItem.rightBarButtonItem
+        UserDefaults.standard.addToRecentCoinNames(newName: coinName)
         
+        //self.navigationController?.navigationBar.isTranslucent = true
+        print(navigationController?.navigationBar)
+        //print(navigationItem.searchController?.searchBar.frame)
+        //navigationItem.searchController?.searchBar.isHidden = true
         //scrollView.contentSize = CGSize(width: view.frame.width, height: 1000)
        collectionView.register(DetailCoinCollectionViewCell.self, forCellWithReuseIdentifier: DetailCoinCollectionViewCell.cellId)
         collectionView?.register(DetailCoinControllerHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DetailCoinControllerHeader.headerId)
         
-        self.navigationController?.navigationBar.barStyle = .black
-        self.navigationItem.title = "Coin Data"
+        setUpBarButtons()
+    }
+    
+    @objc func favoriteButtonPressed() {
+        switchImage()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
     }
 }
 
@@ -96,7 +140,9 @@ extension CoinDetailViewController {
         let timestamp = Int64.currentTimeStamp()
         PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : coinName! as Any, "start" : timestamp-86400*(numberOfDays + 1), "end" : timestamp, "period" : 86400]) { (data) in
             //currentCoin = Coin(name: name, data: data)
-            self.coin = Coin(name: self.coinName, data: data)
+            var rData = data
+            rData.reverse()
+            self.coin = Coin(name: self.coinName, data: rData)
             
             
             var arr : [ChartDataEntry] = [ChartDataEntry]()

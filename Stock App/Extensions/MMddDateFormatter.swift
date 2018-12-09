@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 
 extension DateFormatter {
-    static func MMddDateFormatter() -> DateFormatter {
+    static func MMddDateFormatter(format : String) -> DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "GMT") //Set timezone that you want
         dateFormatter.locale = NSLocale.current
-        dateFormatter.dateFormat = "MM-dd" //Specify your format that you want
+        dateFormatter.dateFormat = format //Specify your format that you want
         return dateFormatter
     }
 }
