@@ -32,10 +32,10 @@ extension UserDefaults {
     }
     
     func addToFavoritesCoinNames(newName : String) {
-        /*var prevNames = UserDefaults.standard.getFavoriteCoinNames()
-        prevNames.append(newName)*/
+        guard var prevNames = UserDefaults.standard.getFavoriteCoinNames() else { return }
+        prevNames.append(newName)
         //at this moment only one favorite Coin will be availiable
-        let prevNames = [newName]
+        //let prevNames = [newName]
         let currData = NSKeyedArchiver.archivedData(withRootObject: prevNames)
         UserDefaults.standard.set(currData, forKey: UserDefaults.favoriteCoinNamesKey)
     }

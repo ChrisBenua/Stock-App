@@ -11,6 +11,20 @@ class MainCurrenciesController : UIViewController {
     /// We should fetch it from database(CoreData)
     var recentCurrencies = [Coin]()
     var chart : LineChartView = LineChartView()
+    var lineChartDataSets = [LineChartData]()
+    var coinNameToIndex = [String : Int]()
+    
+    var index : Int = 0 {
+        didSet {
+            if (index < 0) {
+                index += lineChartDataSets.count
+            }
+            if (index >= lineChartDataSets.count) {
+                index -= lineChartDataSets.count
+            }
+            chart.data = lineChartDataSets[index]
+        }
+    }
     
     let favoriteHeader : UILabel = {
        let label = UILabel()
@@ -82,6 +96,9 @@ class MainCurrenciesController : UIViewController {
         
         chart.xAxis.valueFormatter = TimestampToDateAxisValueFormatter()
         
+        let swipe = UIPanGestureRecognizer(target: self, action: #selector(handleLeftSwipe(_:)))
+        chart.addGestureRecognizer(swipe)
+        
         self.view.backgroundColor = UIColor.mainBlackColor()
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.isTranslucent = false
@@ -97,6 +114,59 @@ class MainCurrenciesController : UIViewController {
         recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 170)
         chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 5, paddingBottom: 10, paddingRight: 5, width: 0, height: 0)
         //recentlyUsedCollectionView.layoutMargins.left = 20
+    }
+    
+    @objc func handleLeftSwipe(_ sender:UIPanGestureRecognizer) {
+        print("Left Swipe")
+        if sender.state == .changed {
+            let translation = sender.translation(in: graphView)
+            graphView.transform = CGAffineTransform(translationX: translation.x, y: 0)
+        }
+        else if sender.state == .ended {
+            let translation = sender.translation(in: graphView)
+            /*UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.graphView.transform = .identity
+                
+                if translation.x > 50 {
+                    print("going to prev")
+                }
+                
+                if translation.x < -50 {
+                    print("going to next")
+                }
+                
+            })*/
+            
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                if (translation.x > 50) {
+                    self.graphView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    self.index = self.index - 1
+                } else if (translation.x < -50) {
+                    self.graphView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    self.index = self.index + 1
+                } else {
+                    self.graphView.transform = .identity
+                }
+                //self.graphView.transform = CGAffineTransform(translationX: <#T##CGFloat#>, y: <#T##CGFloat#>)
+            }) { (_) in
+                if (translation.x > 50) {
+                    self.graphView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                } else if (translation.x < -50) {
+                    self.graphView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                } else {
+                    self.graphView.transform = .identity
+                }
+                UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                    self.graphView.transform = .identity
+                }, completion: { (_) in
+                    
+                })
+            }
+        }
+    }
+    
+    @objc func handleRightSwipe(_ sender:UISwipeGestureRecognizer) {
+        print("Right Swipe")
     }
     
     func fetchCoinsData() {
@@ -180,22 +250,33 @@ extension MainCurrenciesController : UICollectionViewDelegateFlowLayout {
 extension  MainCurrenciesController {
     func fetchFavoriteCoinData(numberOfDays : Int64) {
         let nameArray = UserDefaults.standard.getFavoriteCoinNames() ?? ["USDC_BTC"]
-        let name = nameArray.first
+        lineChartDataSets = Array(repeating: LineChartData(), count: nameArray.count)
+        for i in 0..<nameArray.count {
+            coinNameToIndex[nameArray[i]] = i
+        }
+        //let name = nameArray.first
         let timestamp = Int64.currentTimeStamp()
-        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : name! as Any, "start" : timestamp-Configuration.secondInOneDay*(numberOfDays + 1), "end" : timestamp, "period" : Configuration.secondInOneDay]) { (data) in
-            //currentCoin = Coin(name: name, data: data)
-            var arr : [ChartDataEntry] = [ChartDataEntry]()
-            for el in data.suffix(Int(numberOfDays)) {
-                arr.append(ChartDataEntry(x: Double(el.date), y: el.close))
+        for name in nameArray {
+            PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : name as Any, "start" : timestamp-Configuration.secondInOneDay*(numberOfDays + 1), "end" : timestamp, "period" : Configuration.secondInOneDay]) { (data) in
+                //currentCoin = Coin(name: name, data: data)
+                var arr : [ChartDataEntry] = [ChartDataEntry]()
+                for el in data.suffix(Int(numberOfDays)) {
+                    arr.append(ChartDataEntry(x: Double(el.date), y: el.close))
+                }
+                guard let index = self.coinNameToIndex[name] else { return }
+                let dataSet : LineChartDataSet = LineChartDataSet(values: arr, label : name + " \(index + 1) / \(self.coinNameToIndex.count)")
+                dataSet.setColor(UIColor.green)
+                dataSet.valueTextColor = .white
+                dataSet.circleRadius = 3
+                dataSet.fillColor = .black
+                let lineData = LineChartData(dataSet: dataSet)
+                self.lineChartDataSets[index] = lineData
+                if (index == 0) {
+                    self.chart.data = lineData
+                }
+                //self.chart.data = lineData
+                
             }
-            
-            let dataSet : LineChartDataSet = LineChartDataSet(values: arr, label : name)
-            dataSet.setColor(UIColor.green)
-            dataSet.valueTextColor = .white
-            dataSet.circleRadius = 3
-            dataSet.fillColor = .black
-            let lineData = LineChartData(dataSet: dataSet)
-            self.chart.data = lineData
         }
     }
 }
