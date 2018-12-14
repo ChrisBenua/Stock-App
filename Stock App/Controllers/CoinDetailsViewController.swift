@@ -23,13 +23,13 @@ class CoinDetailViewController : UICollectionViewController {
     var coinName : String! {
         didSet {
             fetchFavoriteCoinData(numberOfDays: 30, numberOfItemsOnGraph: 5)
-
         }
     }
     
     var coin : Coin = Coin() {
         didSet {
             self.collectionView.reloadData()
+            self.collectionView.refreshControl?.endRefreshing()
         }
     }
     
@@ -67,10 +67,24 @@ class CoinDetailViewController : UICollectionViewController {
         //print(navigationItem.searchController?.searchBar.frame)
         //navigationItem.searchController?.searchBar.isHidden = true
         //scrollView.contentSize = CGSize(width: view.frame.width, height: 1000)
+        
+        let refresh = UIRefreshControl()
+        refresh.tintColor = .white
+        collectionView.refreshControl = refresh
+        refresh.addTarget(self, action: #selector(toggleRefresh), for: .valueChanged)
+        
+        
        collectionView.register(DetailCoinCollectionViewCell.self, forCellWithReuseIdentifier: DetailCoinCollectionViewCell.cellId)
         collectionView?.register(DetailCoinControllerHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DetailCoinControllerHeader.headerId)
         
         setUpBarButtons()
+    }
+    
+    @objc func toggleRefresh() {
+        self.coin.data.removeAll()
+        self.collectionView.reloadData()
+        fetchFavoriteCoinData(numberOfDays: 30, numberOfItemsOnGraph: 5)
+
     }
     
     @objc func favoriteButtonPressed() {
@@ -121,13 +135,14 @@ extension CoinDetailViewController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 260)
+        return CGSize(width: view.frame.width, height: 300)
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DetailCoinControllerHeader.headerId, for: indexPath) as! DetailCoinControllerHeader
         header.coinName = coinName
         self.delegate = header
+        header.delegate = self
         return header
     }
 }
@@ -138,7 +153,7 @@ extension CoinDetailViewController {
             return
         }
         let timestamp = Int64.currentTimeStamp()
-        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : coinName! as Any, "start" : timestamp-86400*(numberOfDays + 1), "end" : timestamp, "period" : 86400]) { (data) in
+        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : coinName! as Any, "start" : timestamp-Configuration.secondInOneDay*(numberOfDays + 1), "end" : timestamp, "period" : Configuration.secondInOneDay]) { (data) in
             //currentCoin = Coin(name: name, data: data)
             var rData = data
             rData.reverse()
@@ -160,4 +175,28 @@ extension CoinDetailViewController {
             self.delegate?.setChartData(lineData: lineData)
         }
     }
+}
+
+//MARK:- DataSetSizeChangedDelegate
+
+extension CoinDetailViewController : DataSetSizeChangedDelegate {
+    func dataSetSizeChanged(numberOfDays: Int) {
+        var data = coin.data
+        data.reverse()
+        var arr : [ChartDataEntry] = [ChartDataEntry]()
+        
+        for el in data.suffix(numberOfDays) {
+            arr.append(ChartDataEntry(x: Double(el.date), y: el.close))
+        }
+        
+        let dataSet : LineChartDataSet = LineChartDataSet(values: arr, label : self.coinName)
+        dataSet.setColor(UIColor.green)
+        dataSet.valueTextColor = .white
+        dataSet.circleRadius = 3
+        dataSet.fillColor = .black
+        let lineData = LineChartData(dataSet: dataSet)
+        self.delegate?.setChartData(lineData: lineData)
+    }
+    
+    
 }

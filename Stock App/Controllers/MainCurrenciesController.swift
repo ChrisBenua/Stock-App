@@ -23,7 +23,9 @@ class MainCurrenciesController : UIViewController {
 
     let graphView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.mainBlackColor()
+        view.backgroundColor = UIColor.mainTitleLabelColor()
+        view.layer.cornerRadius = 9
+        view.clipsToBounds = true
         return view
     }()
 
@@ -65,8 +67,6 @@ class MainCurrenciesController : UIViewController {
         chart.gridBackgroundColor = UIColor.mainTextLabelColor()
         chart.drawGridBackgroundEnabled = true
         chart.backgroundColor = UIColor.mainTitleLabelColor()
-        chart.layer.cornerRadius = 8
-        chart.clipsToBounds = true
         chart.legend.textColor = .white
         chart.autoScaleMinMaxEnabled = true
         chart.xAxis.labelTextColor = .white
@@ -92,15 +92,20 @@ class MainCurrenciesController : UIViewController {
         view.addSubview(recentlyUsedCollectionView)
         graphView.addSubview(chart)
         favoriteHeader.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 25, paddingBottom: 0, paddingRight: 3, width: 0, height: 40)
-        graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 200)
+        graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 200)
         recentlyUsedLabel.anchor(top: graphView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 25, paddingBottom: 0, paddingRight: 20, width: 0, height: 40)
         recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 170)
-        chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 5, paddingBottom: 10, paddingRight: 5, width: 0, height: 0)
         //recentlyUsedCollectionView.layoutMargins.left = 20
     }
     
     func fetchCoinsData() {
-        let recentCoinsNames = String.getCoinsNames()
+        var recentCoinsNames = String.getCoinsNames()
+        if (recentCoinsNames.isEmpty) {
+            recentCoinsNames.append("USDC_BTC")
+            recentCoinsNames.append("USDC_XMR")
+            recentCoinsNames.append("USDC_XRP")
+        }
         let timestamp = Int64.currentTimeStamp()
         recentCurrencies = Array(repeating: Coin(), count: recentCoinsNames.count)
         var places : [String : Int] = [String : Int]()
@@ -111,7 +116,7 @@ class MainCurrenciesController : UIViewController {
         var cnt = 0
         for el in recentCoinsNames {
             var currentCoin : Coin = Coin()
-            PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-86400*2, "end" : timestamp, "period" : 86400]) { (data) in
+            PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-Configuration.secondInOneDay*2, "end" : timestamp, "period" : Configuration.secondInOneDay]) { (data) in
                 currentCoin = Coin(name: el, data: data)
                 self.recentCurrencies[places[el]!] = currentCoin
                 cnt += 1
@@ -174,13 +179,13 @@ extension MainCurrenciesController : UICollectionViewDelegateFlowLayout {
 ///MARK:- Charts
 extension  MainCurrenciesController {
     func fetchFavoriteCoinData(numberOfDays : Int64) {
-        guard let nameArray = UserDefaults.standard.getFavoriteCoinNames() else { return }
+        let nameArray = UserDefaults.standard.getFavoriteCoinNames() ?? ["USDC_BTC"]
         let name = nameArray.first
         let timestamp = Int64.currentTimeStamp()
-        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : name! as Any, "start" : timestamp-86400*(numberOfDays + 1), "end" : timestamp, "period" : 86400]) { (data) in
+        PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : name! as Any, "start" : timestamp-Configuration.secondInOneDay*(numberOfDays + 1), "end" : timestamp, "period" : Configuration.secondInOneDay]) { (data) in
             //currentCoin = Coin(name: name, data: data)
             var arr : [ChartDataEntry] = [ChartDataEntry]()
-            for el in data {
+            for el in data.suffix(Int(numberOfDays)) {
                 arr.append(ChartDataEntry(x: Double(el.date), y: el.close))
             }
             

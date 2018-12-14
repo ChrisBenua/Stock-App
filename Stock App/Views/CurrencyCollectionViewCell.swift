@@ -42,7 +42,7 @@ class CurrencyCollectionViewCell : ShadowCollectionViewCellBase {
         guard let currentTimeStamp = coin.data.last else {return}//Unix time in milisecond
         var prevDayValue : Double = coin.data.last!.close
         for el in coin.data {
-            if currentTimeStamp.date - el.date >= 86400 {
+            if currentTimeStamp.date - el.date >= Configuration.secondInOneDay {
                 prevDayValue = el.close
             }
         }

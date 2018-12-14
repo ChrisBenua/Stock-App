@@ -11,6 +11,9 @@ import UIKit
 private let reuseIdentifier = "Cell"
 
 class NewsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    ///Pull to refresh control
+    var refresher : UIRefreshControl!
+    
     ///Activity indicator
     let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
 
@@ -37,22 +40,23 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         }
         
         collectionView.backgroundColor = UIColor.mainBlackColor()
+        collectionView.alwaysBounceVertical = true
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
         
         self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.isTranslucent = true
         self.collectionView!.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.navigationController?.navigationBar.topItem?.title = "News"
         //Because of tabbar
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         setUpSearchBar()
         
         fetchNews()
         
-        
-        
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "refresh").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(toggleRefresher))]
         //Just for test
         //PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : "BTC_XMR", "start" : "1405699200", "end" : "1405728000", "period" : "14400"]) { (coinDataArr) in
             
@@ -60,6 +64,14 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         // Do any additional setup after loading the view.
     }
 
+    //MARK:- Refresher
+    @objc func toggleRefresher() {
+        news.removeAll()
+        collectionView.reloadData()
+        fetchNews(text: searchController.searchBar.text!)
+    }
+    
+    
     /*
     // MARK: - Navigation
 
@@ -137,6 +149,7 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         APIHelper.shared.fetchAllNews(luceneParams: ["text" : finalText, "website.domainName" : "(bloomberg.com OR marketwatch.com OR cointelegraph.com)"], luceneLogicParams: ["AND"], simpleParams: ["sortBy" : "discoverDate", "sortOrder" : "DESC"], completionHandler: { (res) in
             self.news = res
             self.collectionView.reloadData()
+            self.collectionView.refreshControl?.endRefreshing()
             self.removeActivityIndicator()
         })
     }

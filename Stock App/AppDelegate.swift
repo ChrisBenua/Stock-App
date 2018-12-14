@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().barTintColor = UIColor.mainBlackColor()
         UINavigationBar.appearance().prefersLargeTitles = true
         
+        let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)]
+        let normalTitleTextAttr = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]
+        UISegmentedControl.appearance().setTitleTextAttributes(titleTextAttributes, for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes(normalTitleTextAttr, for: .normal)
+        
         window = UIWindow()
         window?.makeKeyAndVisible()
         var tabBar = CommonTabBarController()

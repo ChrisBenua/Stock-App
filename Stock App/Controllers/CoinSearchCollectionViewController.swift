@@ -13,6 +13,7 @@ import UIKit
 class CoinSearchCollectionViewController : UICollectionViewController {
     public static var coinNames = [String]()
     var allCoins : [Coin] = [Coin]()
+    var fetchDate : [String : Int64] = [String : Int64]()
     var alreadyFetched : [String : Coin] = [String : Coin]()
     var searchedCoins : [Coin] = [Coin]() {
         didSet {
@@ -23,6 +24,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         didSet {
             for el in searchedNames {
                 alreadyFetched[el] = Coin()
+                fetchDate[el] = 0
             }
         }
     }
@@ -43,6 +45,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addCustomHeader()
         searchedNames = CoinSearchCollectionViewController.coinNames
         collectionView.backgroundColor = UIColor.mainBlackColor()
         navigationController?.navigationBar.barStyle = .black
@@ -55,6 +58,17 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         
     }
     
+    lazy var customHeaderView : UIView = {
+        let v = UIView()
+        let label = UILabel()
+        label.text = "I Found Nothing"
+        label.textColor = .white
+        v.backgroundColor = UIColor.mainBlackColor()
+        v.addSubview(label)
+        label.anchor(top: v.topAnchor, left: v.leftAnchor, bottom: v.bottomAnchor, right: v.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
+        label.textAlignment = .center
+        return v
+    }()
     
     //MARK:- UICollectionViewDelegate
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -88,17 +102,15 @@ extension CoinSearchCollectionViewController : UICollectionViewDelegateFlowLayou
         return CGSize(width: view.bounds.width - 20, height: 80)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
+        return 4
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
+        return 4
     }
 }
 
 //MARK:- SearchBardelegate
 extension CoinSearchCollectionViewController : UISearchBarDelegate {
-    
-    
     ///Set Search Bar fields
     fileprivate func setUpSearchBar() {
         navigationItem.searchController = searchController
@@ -116,6 +128,21 @@ extension CoinSearchCollectionViewController : UISearchBarDelegate {
         })
     }
 }
+
+//MARK:- Custom Header
+
+extension CoinSearchCollectionViewController {
+    func addCustomHeader() {
+        if (customHeaderView.superview == nil) {
+            view.addSubview(customHeaderView)
+            customHeaderView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 200, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
+        }
+    }
+    func removeCustomHeader() {
+        customHeaderView.removeFromSuperview()
+    }
+}
+
 //MARK:- API
 extension CoinSearchCollectionViewController {
     func fetchCoinsWithNames(text : String) {
@@ -126,18 +153,27 @@ extension CoinSearchCollectionViewController {
         let timestamp = Int64.currentTimeStamp()
         searchedCoins.removeAll()
         collectionView.reloadData()
+        addCustomHeader()
         for el in Names {
             var currentCoin : Coin = Coin()
-            if !alreadyFetched[el]!.name.isEmpty {
+            print(Int64.currentTimeStamp())
+            print(fetchDate[el]!)
+            print(Int64.currentTimeStamp() - fetchDate[el]!)
+            if !alreadyFetched[el]!.name.isEmpty && Int64.currentTimeStamp() - fetchDate[el]! < Configuration.expiringDataTime {
                 self.searchedCoins.append(alreadyFetched[el]!)
+                self.removeCustomHeader()
                 self.collectionView.reloadData()
             } else {
-                PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-86400*2, "end" : timestamp, "period" : 86400]) { (data) in
+                PoloniexAPIHelper.fetchCurrencyData(params: ["currencyPair" : el, "start" : timestamp-Configuration.secondInOneDay*2, "end" : timestamp, "period" : Configuration.secondInOneDay]) { (data) in
                     currentCoin = Coin(name: el, data: data)
-                    self.searchedCoins.append(currentCoin)
                     self.alreadyFetched[el] = currentCoin
-                    self.collectionView.reloadData()
-                    
+                    self.fetchDate[el] = Int64.currentTimeStamp()
+                    print(self.searchController.searchBar.text!)
+                    if (text == self.searchController.searchBar.text!) {
+                        self.searchedCoins.append(currentCoin)
+                        self.removeCustomHeader()
+                        self.collectionView.reloadData()
+                    }
                 }
             }
         }

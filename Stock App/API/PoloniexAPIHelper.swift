@@ -29,7 +29,7 @@ class PoloniexAPIHelper {
         Alamofire.request(QueryURL, method: .get, parameters: myparams, headers: nil).responseJSON { (resp) in
             //Add checker for status code
             print(resp.result.value)
-            let dict = resp.result.value as! [[String : Any]]
+            guard let dict = resp.result.value as? [[String : Any]] else { return }
             var items : [CoinData] = [CoinData]()
             do {
                 for el in dict {

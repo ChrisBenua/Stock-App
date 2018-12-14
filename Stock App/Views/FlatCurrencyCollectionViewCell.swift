@@ -35,7 +35,6 @@ class FlatCurrencyCollectionViewCell : ShadowCollectionViewCellBase {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
         label.numberOfLines = 1
-        
         return label
     }()
     
@@ -43,7 +42,7 @@ class FlatCurrencyCollectionViewCell : ShadowCollectionViewCellBase {
         let currentTimeStamp = coin.data.last!.date//Unix time in milisecond
         var prevDayValue : Double = 0
         for el in coin.data {
-            if currentTimeStamp - el.date >= 86400 {
+            if currentTimeStamp - el.date >= Configuration.secondInOneDay {
                 prevDayValue = el.close
             }
         }
@@ -55,7 +54,11 @@ class FlatCurrencyCollectionViewCell : ShadowCollectionViewCellBase {
             currentValueLabel.textColor = UIColor.red
         }
         // formats like "123, +2%"
-        currentValueLabel.text = "\(String.init(format: "%.2f", todayValue)), \(String.init(format: "%.2f", todayValue/prevDayValue * 100 - 100))%"
+        var percent = todayValue/prevDayValue * 100 - 100
+        if (percent.isNaN) {
+            percent = 0
+        }
+        currentValueLabel.text = "\(String.init(format: "%.5f", todayValue)), \(String.init(format: "%.2f", percent))%"
     }
     
     override init(frame: CGRect) {
@@ -64,10 +67,10 @@ class FlatCurrencyCollectionViewCell : ShadowCollectionViewCellBase {
         mainCellView.addSubview(nameLabel)
         mainCellView.addSubview(currentValueLabel)
         
-        nameLabel.anchor(top: nil, left: mainCellView.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: 130, height: 35)
-        currentValueLabel.anchor(top: nil, left: nameLabel.rightAnchor, bottom: nil, right: mainCellView.rightAnchor, paddingTop: 0, paddingLeft: 30, paddingBottom: 0, paddingRight: 10, width: 0, height: 35)
-        nameLabel.centerYAnchor.constraint(equalTo: mainCellView.centerYAnchor)
-        currentValueLabel.centerYAnchor.constraint(equalTo: mainCellView.centerYAnchor)
+        nameLabel.anchor(top: nil, left: mainCellView.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: 150, height: 30)
+        currentValueLabel.anchor(top: nil, left: nameLabel.rightAnchor, bottom: nil, right: mainCellView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 10, width: 0, height: 30)
+        nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        currentValueLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         nameLabel.textAlignment = .left
         currentValueLabel.textAlignment = .right
     }

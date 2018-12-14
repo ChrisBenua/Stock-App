@@ -29,6 +29,7 @@
 		AA71065121AB067F0036067D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA71065021AB067F0036067D /* Assets.xcassets */; };
 		AA71065421AB067F0036067D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA71065221AB067F0036067D /* LaunchScreen.storyboard */; };
 		AA71065C21AB08690036067D /* NewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA71065B21AB08690036067D /* NewsItem.swift */; };
+		AA800E3221C39A5300C4FBB1 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA800E3121C39A5300C4FBB1 /* Configuration.swift */; };
 		AAB1579821AB237E0048966A /* NewsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1579721AB237E0048966A /* NewsCollectionViewCell.swift */; };
 		AAB1579E21AB23CF0048966A /* Anchoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1579D21AB23CF0048966A /* Anchoring.swift */; };
 		AAB157A021AB240C0048966A /* NewsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1579F21AB240C0048966A /* NewsCollectionViewController.swift */; };
@@ -69,6 +70,7 @@
 		AA71065321AB067F0036067D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA71065521AB067F0036067D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA71065B21AB08690036067D /* NewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
+		AA800E3121C39A5300C4FBB1 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		AAB1579721AB237E0048966A /* NewsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAB1579D21AB23CF0048966A /* Anchoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchoring.swift; sourceTree = "<group>"; };
 		AAB1579F21AB240C0048966A /* NewsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				AA6ED2E621B6D69E006F4411 /* ClearConstraints.swift */,
 				AA46153A21B7BD1B005E093E /* MMddDateFormatter.swift */,
 				AAB38ECD21BD84020081ED23 /* UserDefaultsExtension.swift */,
+				AA800E3121C39A5300C4FBB1 /* Configuration.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				AA71064721AB067D0036067D /* AppDelegate.swift in Sources */,
 				AA6ED2E121B6CE4D006F4411 /* ChartXAxisValueFormatter.swift in Sources */,
 				AAB157A621AB27940048966A /* Colors.swift in Sources */,
+				AA800E3221C39A5300C4FBB1 /* Configuration.swift in Sources */,
 				AAE7FF4D21B43E0F00CDD1A6 /* CurrentTimeStamp.swift in Sources */,
 				AAB157AB21AB37A50048966A /* ImageDownloading.swift in Sources */,
 				AA6ED2E321B6D3E3006F4411 /* CoinSearchCollectionViewController.swift in Sources */,

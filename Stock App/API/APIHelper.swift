@@ -46,7 +46,7 @@ class APIHelper {
                           method: .get,
                           parameters: allParams, headers: headers)
             .responseJSON { (resp) in
-                let dict = resp.result.value as! [[String : Any]]
+                guard let dict = resp.result.value as? [[String : Any]] else { return }
                 var items : [NewsItem] = [NewsItem]()
                 do {
                     for el in dict {
