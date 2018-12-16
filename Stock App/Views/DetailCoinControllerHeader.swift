@@ -39,6 +39,7 @@ class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewContro
     
     lazy var numberOfDaysControl : UISegmentedControl = {
         let sc = UISegmentedControl(items: ["30 days", "15 days", "5 days"])
+        sc.selectedSegmentIndex = 2
         sc.tintColor = UIColor.mainBlackColor()
         sc.addTarget(self, action: #selector(toggleNumberOfDaysControl), for: .valueChanged)
         return sc

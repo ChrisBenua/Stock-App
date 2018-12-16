@@ -98,6 +98,9 @@ class MainCurrenciesController : UIViewController {
         
         let swipe = UIPanGestureRecognizer(target: self, action: #selector(handleLeftSwipe(_:)))
         chart.addGestureRecognizer(swipe)
+        let doubleClick = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        doubleClick.numberOfTapsRequired = 2
+        chart.addGestureRecognizer(doubleClick)
         
         self.view.backgroundColor = UIColor.mainBlackColor()
         self.navigationController?.navigationBar.barStyle = .black
@@ -114,6 +117,13 @@ class MainCurrenciesController : UIViewController {
         recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 170)
         chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 5, paddingBottom: 10, paddingRight: 5, width: 0, height: 0)
         //recentlyUsedCollectionView.layoutMargins.left = 20
+    }
+    
+    @objc func doubleTapped() {
+        let cv = CoinDetailViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        guard let names = UserDefaults.standard.getFavoriteCoinNames() else { return }
+        cv.coinName = names[index]
+        navigationController?.pushViewController(cv, animated: true)
     }
     
     @objc func handleLeftSwipe(_ sender:UIPanGestureRecognizer) {
@@ -271,7 +281,7 @@ extension  MainCurrenciesController {
                 dataSet.fillColor = .black
                 let lineData = LineChartData(dataSet: dataSet)
                 self.lineChartDataSets[index] = lineData
-                if (index == 0) {
+                if (nameArray.index(of: name) == self.index || self.chart.data == nil) {
                     self.chart.data = lineData
                 }
                 //self.chart.data = lineData
