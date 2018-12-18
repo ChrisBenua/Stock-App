@@ -10,9 +10,22 @@ import Foundation
 
 
 extension UserDefaults {
+    static let omniIdKey = "omniId"
     static let maxRecentSize = 10
     static let favoriteCoinNamesKey = "favoriteKey"
     static let recentCoinNamesKey = "recent"
+    
+    func getOmniId() -> String? {
+        guard let data = UserDefaults.standard.data(forKey: UserDefaults.omniIdKey) else { return nil}
+        guard let id = NSKeyedUnarchiver.unarchiveObject(with: data) as? String else { return nil }
+        return id
+    }
+    
+    func saveOmniId(id : String) {
+        let data = NSKeyedArchiver.archivedData(withRootObject: id)
+        UserDefaults.standard.set(data, forKey: UserDefaults.omniIdKey)
+    }
+    
     func getFavoriteCoinNames() -> [String]? {
         guard let data = UserDefaults.standard.data(forKey: UserDefaults.favoriteCoinNamesKey) else {return nil}
         guard let names = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String] else { return nil }

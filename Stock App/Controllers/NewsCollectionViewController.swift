@@ -35,9 +35,15 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        OmniAPIHelper.shared.getchUsersData(address: "1FoWyxwPXuj4C6abqwhjDWdz6D4PZgYRjA") { (user) in
+            print(user)
+        }
+        
         PoloniexAPIHelper.fetchNames { (data) in
             CoinSearchCollectionViewController.coinNames = data
         }
+        
         
         collectionView.backgroundColor = UIColor.mainBlackColor()
         collectionView.alwaysBounceVertical = true

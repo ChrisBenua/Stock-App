@@ -57,7 +57,7 @@ class APIHelper {
                 } catch let err {
                     print(err)
                 }
-                print(resp.result.value)
+                //print(resp.result.value)
         }
         
     }

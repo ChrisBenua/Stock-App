@@ -40,10 +40,11 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let coinSearchController = templateNavController(unselectedImage: #imageLiteral(resourceName: "searchImageUnselected").withRenderingMode(.alwaysOriginal),
                                                          selectedImage: #imageLiteral(resourceName: "searchImageSelected").withRenderingMode(.alwaysOriginal), rootViewController: CoinSearchCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let userInfoController = templateNavController(unselectedImage: #imageLiteral(resourceName: "account").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "account").withRenderingMode(.alwaysOriginal), rootViewController: UserInfoCollectionViewController(collectionViewLayout : UICollectionViewFlowLayout()))
         //view.backgroundColor = .black
         //tabBar.isTranslucent = false
         self.moreNavigationController.navigationBar.tintColor = .black
-        viewControllers = [newsNavController, currenciesNavController, coinSearchController]
+        viewControllers = [newsNavController, currenciesNavController, coinSearchController, userInfoController]
     }
 
     
