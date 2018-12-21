@@ -56,6 +56,8 @@ class CoinDetailViewController : UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let names = UserDefaults.standard.getFavoriteCoinNames() ?? [String]()
+        isFavorite = names.contains(coinName)
         //view.addSubview(scrollView)
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationItem.title = coinName

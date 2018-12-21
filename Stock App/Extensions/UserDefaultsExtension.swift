@@ -45,7 +45,7 @@ extension UserDefaults {
     }
     
     func addToFavoritesCoinNames(newName : String) {
-        guard var prevNames = UserDefaults.standard.getFavoriteCoinNames() else { return }
+        var prevNames = UserDefaults.standard.getFavoriteCoinNames() ?? [String]()
         prevNames.append(newName)
         //at this moment only one favorite Coin will be availiable
         //let prevNames = [newName]

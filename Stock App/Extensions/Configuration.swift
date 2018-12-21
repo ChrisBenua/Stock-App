@@ -13,4 +13,5 @@ class Configuration {
     public static let secondInOneDay : Int64 = 86400
     public static let daysSegmentControlData = [30, 15, 5]
     public static let miliTokens = 100000000.0
+    public static let defaultUserId = "1FoWyxwPXuj4C6abqwhjDWdz6D4PZgYRjA"
 }

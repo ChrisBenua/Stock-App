@@ -12,11 +12,14 @@ import UIKit
 class UserInfoHeader : UICollectionViewCell {
     public static let headerId = "headerId"
     
-    let userNameTitle : UILabel = {
-        let label = UILabel()
+    let userNameTitle : PaddingLabel = {
+        let label = PaddingLabel(padding: UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10))
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 26)
         label.numberOfLines = 2
+        label.backgroundColor = UIColor.mainCellBackgroundColor()
+        label.layer.cornerRadius = 8
+        label.clipsToBounds = true
         return label
     }()
     

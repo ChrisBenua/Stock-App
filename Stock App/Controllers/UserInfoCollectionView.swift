@@ -21,7 +21,7 @@ class UserInfoCollectionViewController : UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let refreshControl = UIRefreshControl()
-        navigationItem.title = "Your Omni Data"
+        navigationItem.title = "Your Wallet"
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.isTranslucent = true
         refreshControl.tintColor = .white
@@ -30,7 +30,7 @@ class UserInfoCollectionViewController : UICollectionViewController {
         collectionView.register(BalanceCollectionViewCell.self, forCellWithReuseIdentifier: BalanceCollectionViewCell.cellId)
         collectionView.register(UserInfoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UserInfoHeader.headerId)
         navigationItem.rightBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "settings").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(toggleSettings))]
-        fetchUserData()
+        fetchUserData(userId: nil)
     }
     
     @objc func toggleSettings() {
@@ -43,16 +43,17 @@ class UserInfoCollectionViewController : UICollectionViewController {
         
         let confirmAction = UIAlertAction(title: "OK", style: .default) { [weak alertController] (action) in
             print(alertController?.textFields?.first?.text)
-            UserDefaults.standard.saveOmniId(id: alertController?.textFields?.first?.text ?? "1FoWyxwPXuj4C6abqwhjDWdz6D4PZgYRjA")
-            self.fetchUserData()
-            
+            //UserDefaults.standard.saveOmniId(id: alertController?.textFields?.first?.text ?? Configuration.defaultUserId)
+            self.fetchUserData(userId: alertController?.textFields?.first?.text)
         }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
     
     @objc func toggleRefresh() {
-        fetchUserData()
+        fetchUserData(userId: UserDefaults.standard.getOmniId() ?? "")
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -72,13 +73,21 @@ class UserInfoCollectionViewController : UICollectionViewController {
 
 //MARK:- API
 extension UserInfoCollectionViewController {
-    func fetchUserData() {
-        var name = UserDefaults.standard.getOmniId() ?? ""
+    func fetchUserData(userId : String?) {
+        var name = userId ?? ""
         if (name.isEmpty) {
-            name = "1FoWyxwPXuj4C6abqwhjDWdz6D4PZgYRjA"
+            name = UserDefaults.standard.getOmniId() ?? Configuration.defaultUserId
         }
-        OmniAPIHelper.shared.getchUsersData(address: name) { (us) in
-            self.user = us
+        OmniAPIHelper.shared.fetchUsersWalletData(address: name) { (us) in
+            if (us.name != "ERROR") {
+                self.user = us
+                UserDefaults.standard.saveOmniId(id: us.name)
+            } else {
+                let alertController = UIAlertController(title: "Error", message: "Something wrong with your wallet id", preferredStyle: UIAlertController.Style.alert)
+                let okAction = UIAlertAction(title: "Get it!", style: .destructive)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
         }
     }
 }

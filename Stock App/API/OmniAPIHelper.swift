@@ -13,13 +13,16 @@ class OmniAPIHelper {
     public static var Url = "https://api.omniexplorer.info/v1/address/addr/"
     public static var shared = OmniAPIHelper()
     
-    func getchUsersData(address : String, completionHandler: @escaping (_ : UserInfo) -> ()) {
+    func fetchUsersWalletData(address : String, completionHandler: @escaping (_ : UserInfo) -> ()) {
         if (address.isEmpty) {
             return
         }
         Alamofire.request(OmniAPIHelper.Url, method: .post, parameters: ["addr" : address]).responseJSON { (resp) in
             print(resp)
-            guard let dict = resp.result.value as? [String : Any] else { return }
+            guard let dict = resp.result.value as? [String : Any] else {
+                completionHandler(UserInfo(name: "ERROR", balance: [CoinBalance]()))
+                return
+            }
             do {
                 let data : Data = try JSONSerialization.data(withJSONObject : dict)
                 var item = try JSONDecoder().decode(UserInfo.self, from: data)
