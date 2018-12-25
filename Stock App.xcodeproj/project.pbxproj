@@ -30,6 +30,7 @@
 		AA71065421AB067F0036067D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA71065221AB067F0036067D /* LaunchScreen.storyboard */; };
 		AA71065C21AB08690036067D /* NewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA71065B21AB08690036067D /* NewsItem.swift */; };
 		AA800E3221C39A5300C4FBB1 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA800E3121C39A5300C4FBB1 /* Configuration.swift */; };
+		AAA8A0BC21CE8F540015C2DF /* TransactionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA8A0BB21CE8F540015C2DF /* TransactionCollectionViewCell.swift */; };
 		AAB1579821AB237E0048966A /* NewsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1579721AB237E0048966A /* NewsCollectionViewCell.swift */; };
 		AAB1579E21AB23CF0048966A /* Anchoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1579D21AB23CF0048966A /* Anchoring.swift */; };
 		AAB157A021AB240C0048966A /* NewsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1579F21AB240C0048966A /* NewsCollectionViewController.swift */; };
@@ -76,6 +77,7 @@
 		AA71065521AB067F0036067D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA71065B21AB08690036067D /* NewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
 		AA800E3121C39A5300C4FBB1 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		AAA8A0BB21CE8F540015C2DF /* TransactionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAB1579721AB237E0048966A /* NewsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAB1579D21AB23CF0048966A /* Anchoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchoring.swift; sourceTree = "<group>"; };
 		AAB1579F21AB240C0048966A /* NewsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				AA46153C21B809D0005E093E /* DetailCoinControllerHeader.swift */,
 				AAB6DACD21C853E600916D13 /* BalanceCollectionViewCell.swift */,
 				AAB6DACF21C865BB00916D13 /* UserInfoHeader.swift */,
+				AAA8A0BB21CE8F540015C2DF /* TransactionCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 				AA6ED2E121B6CE4D006F4411 /* ChartXAxisValueFormatter.swift in Sources */,
 				AAB157A621AB27940048966A /* Colors.swift in Sources */,
 				AA800E3221C39A5300C4FBB1 /* Configuration.swift in Sources */,
+				AAA8A0BC21CE8F540015C2DF /* TransactionCollectionViewCell.swift in Sources */,
 				AAB6DACC21C8515500916D13 /* UserInfoCollectionView.swift in Sources */,
 				AAB6DACE21C853E600916D13 /* BalanceCollectionViewCell.swift in Sources */,
 				AAE7FF4D21B43E0F00CDD1A6 /* CurrentTimeStamp.swift in Sources */,
@@ -540,6 +544,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H3VR8LKG29;
 				INFOPLIST_FILE = "Stock App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -561,6 +566,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H3VR8LKG29;
 				INFOPLIST_FILE = "Stock App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

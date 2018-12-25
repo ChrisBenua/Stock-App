@@ -8,6 +8,67 @@
 
 import Foundation
 
+class TransactionSearchResult : Decodable {
+    var transactions : [Transaction]!
+}
+
+class Transaction : Decodable {
+    
+    var Amount : Double {
+        get {
+            return Double.init(amount)!
+        }
+    }
+    
+    var amount : String
+    var coinName : String
+    
+    var type : String
+    var from : String
+    var to : String
+    
+    init() {
+        amount = ""
+        coinName = ""
+        type = ""
+        from = ""
+        to = ""
+    }
+    
+    init(amount : String, coinName : String, type : String, from : String, to : String) {
+        self.amount = amount
+        self.coinName = coinName
+        self.type = type
+        self.from = from
+        self.to = to
+    }
+    
+    enum CodingKeys : String, CodingKey {
+        case amount = "amount"
+        case coinName = "propertyname"
+        case type = "type"
+        case from = "referenceaddress"
+        case to = "sendingaddress"
+    }
+    required init?(coder aDecoder : Decoder) {
+        do {
+            let container = try aDecoder.container(keyedBy: CodingKeys.self)
+            self.amount = try container.decode(String.self, forKey: .amount)
+            self.coinName =  try container.decode(String.self, forKey: .coinName)
+            self.type =  try container.decode(String.self, forKey: .type)
+            self.from =  try container.decode(String.self, forKey: .from)
+            self.to =  try container.decode(String.self, forKey: .to)
+        } catch let err {
+            self.amount = ""
+            self.coinName = ""
+            self.type = ""
+            self.from = ""
+            self.to = ""
+            print("Error when decoding transaction ", err)
+        }
+    }
+}
+
 class UserInfo : Decodable {
     var name : String!
     var balance : [CoinBalance]
@@ -109,5 +170,6 @@ class PropertyInfo : Decodable {
             print("Error in parsing Poloniex JSON ", err)
         }
     }
-    
 }
+
+

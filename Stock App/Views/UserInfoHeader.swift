@@ -9,8 +9,19 @@
 import Foundation
 import UIKit
 
+enum UserProfileProvidedDataTypeEnum : Int {
+    case balance = 0
+    case transactions = 1
+}
+
+protocol UserProfileProvidedDataTypeChanged {
+    func handleDataTypeChanged(type : UserProfileProvidedDataTypeEnum);
+}
+
 class UserInfoHeader : UICollectionViewCell {
     public static let headerId = "headerId"
+    
+    var delegate : UserProfileProvidedDataTypeChanged?
     
     let userNameTitle : PaddingLabel = {
         let label = PaddingLabel(padding: UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10))
@@ -23,10 +34,28 @@ class UserInfoHeader : UICollectionViewCell {
         return label
     }()
     
+    lazy var segmentControl : UISegmentedControl = {
+        let sc = UISegmentedControl(items: ["Balance", "Transactions"])
+        sc.selectedSegmentIndex = 0
+        sc.addTarget(self, action: #selector(toggleDataTypeChanged), for: .valueChanged)
+        sc.tintColor = UIColor.mainCellBackgroundColor()
+        sc.backgroundColor = UIColor.mainBlackColor()
+        
+        return sc
+    }()
+    
+    @objc func toggleDataTypeChanged() {
+        print("toggleDataTypeChanged")
+        delegate?.handleDataTypeChanged(type: UserProfileProvidedDataTypeEnum(rawValue: segmentControl.selectedSegmentIndex)!)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(userNameTitle)
-        userNameTitle.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 4, paddingLeft: 16, paddingBottom: 4, paddingRight: 16, width: 0, height: 0)
+        contentView.addSubview(segmentControl)
+        userNameTitle.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: segmentControl.topAnchor, right: contentView.rightAnchor, paddingTop: 4, paddingLeft: 16, paddingBottom: 10, paddingRight: 16, width: 0, height: 0)
+        segmentControl.anchor(top: userNameTitle.bottomAnchor, left: nil, bottom: contentView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 8, paddingRight: 0, width: 300, height: 0)
+        segmentControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

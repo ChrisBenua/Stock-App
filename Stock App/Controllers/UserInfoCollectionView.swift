@@ -11,7 +11,20 @@ import UIKit
 
 class UserInfoCollectionViewController : UICollectionViewController {
     
+    var currLayout : UserProfileProvidedDataTypeEnum = .balance {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
     var user : UserInfo = UserInfo() {
+        didSet {
+            collectionView.reloadData()
+            collectionView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    var transaction : [Transaction] = [Transaction]() {
         didSet {
             collectionView.reloadData()
             collectionView.refreshControl?.endRefreshing()
@@ -29,8 +42,10 @@ class UserInfoCollectionViewController : UICollectionViewController {
         refreshControl.addTarget(self, action: #selector(toggleRefresh), for: .valueChanged)
         collectionView.register(BalanceCollectionViewCell.self, forCellWithReuseIdentifier: BalanceCollectionViewCell.cellId)
         collectionView.register(UserInfoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UserInfoHeader.headerId)
+        collectionView.register(TransactionCollectionViewCell.self, forCellWithReuseIdentifier: TransactionCollectionViewCell.cellId1)
         navigationItem.rightBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "settings").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(toggleSettings))]
         fetchUserData(userId: nil)
+        fetchUserTransaction(userId: nil)
     }
     
     @objc func toggleSettings() {
@@ -45,6 +60,7 @@ class UserInfoCollectionViewController : UICollectionViewController {
             print(alertController?.textFields?.first?.text)
             //UserDefaults.standard.saveOmniId(id: alertController?.textFields?.first?.text ?? Configuration.defaultUserId)
             self.fetchUserData(userId: alertController?.textFields?.first?.text)
+            self.fetchUserTransaction(userId: alertController?.textFields?.first?.text)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(confirmAction)
@@ -61,13 +77,27 @@ class UserInfoCollectionViewController : UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return user.balance.count
+        switch (currLayout) {
+        case .balance:
+            return user.balance.count
+        case .transactions:
+            return transaction.count
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BalanceCollectionViewCell.cellId, for: indexPath) as! BalanceCollectionViewCell
-        cell.coinBalance = user.balance[indexPath.row]
-        return cell
+        switch currLayout {
+        case .balance:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BalanceCollectionViewCell.cellId, for: indexPath) as! BalanceCollectionViewCell
+            cell.coinBalance = user.balance[indexPath.row]
+            return cell
+        case .transactions:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TransactionCollectionViewCell.cellId1, for: indexPath) as! TransactionCollectionViewCell
+            cell.username = user.name
+            cell.transaction = self.transaction[indexPath.row]
+            return cell
+        }
+        
     }
 }
 
@@ -90,6 +120,17 @@ extension UserInfoCollectionViewController {
             }
         }
     }
+    
+    func fetchUserTransaction(userId : String?) {
+        var name = userId ?? ""
+        if (name.isEmpty) {
+            name = UserDefaults.standard.getOmniId() ?? Configuration.defaultUserId
+        }
+        
+        OmniAPIHelper.shared.fetchUsersTransactions(address: name, page: 0) { (trans) in
+            self.transaction = trans
+        }
+    }
 }
 
 //MARK:- CollectionFlowLayoutDelegate
@@ -102,17 +143,32 @@ extension UserInfoCollectionViewController : UICollectionViewDelegateFlowLayout 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width - 16) , height: 80)
+        switch currLayout {
+        case .balance:
+            return CGSize(width: (view.frame.width - 16) , height: 80)
+        case .transactions:
+            return CGSize(width: (view.frame.width - 16) , height: 160)
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width - 16, height: 80)
+        return CGSize(width: view.frame.width - 16, height: 150)
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DetailCoinControllerHeader.headerId, for: indexPath) as! UserInfoHeader
-        header.userNameTitle.text = user.name + " balance:"
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: UserInfoHeader.headerId, for: indexPath) as! UserInfoHeader
+        header.userNameTitle.text = user.name
+        header.delegate = self
         return header
     }
+}
+
+extension UserInfoCollectionViewController : UserProfileProvidedDataTypeChanged {
+    func handleDataTypeChanged(type: UserProfileProvidedDataTypeEnum) {
+        currLayout = type
+    }
+    
+    
 }
 
