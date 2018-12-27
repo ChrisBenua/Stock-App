@@ -26,6 +26,7 @@ class Transaction : Decodable {
     var type : String
     var from : String
     var to : String
+    var blockTime : Double
     
     init() {
         amount = ""
@@ -33,14 +34,16 @@ class Transaction : Decodable {
         type = ""
         from = ""
         to = ""
+        blockTime = 0
     }
     
-    init(amount : String, coinName : String, type : String, from : String, to : String) {
+    init(amount : String, coinName : String, type : String, from : String, to : String, blocktime : Double) {
         self.amount = amount
         self.coinName = coinName
         self.type = type
         self.from = from
         self.to = to
+        self.blockTime = blocktime
     }
     
     enum CodingKeys : String, CodingKey {
@@ -49,6 +52,7 @@ class Transaction : Decodable {
         case type = "type"
         case from = "referenceaddress"
         case to = "sendingaddress"
+        case blockTime = "blocktime"
     }
     required init?(coder aDecoder : Decoder) {
         do {
@@ -58,12 +62,14 @@ class Transaction : Decodable {
             self.type =  try container.decode(String.self, forKey: .type)
             self.from =  try container.decode(String.self, forKey: .from)
             self.to =  try container.decode(String.self, forKey: .to)
+            self.blockTime = try container.decode(Double.self, forKey: .blockTime)
         } catch let err {
             self.amount = ""
             self.coinName = ""
             self.type = ""
             self.from = ""
             self.to = ""
+            self.blockTime = 0
             print("Error when decoding transaction ", err)
         }
     }

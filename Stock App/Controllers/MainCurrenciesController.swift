@@ -65,6 +65,7 @@ class MainCurrenciesController : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.index = self.index >= UserDefaults.standard.getFavoriteCoinNames()?.count ?? 0 ? 0 : self.index
         fetchCoinsData()
         fetchFavoriteCoinData(numberOfDays: 5)
     }
@@ -261,6 +262,7 @@ extension  MainCurrenciesController {
     func fetchFavoriteCoinData(numberOfDays : Int64) {
         let nameArray = UserDefaults.standard.getFavoriteCoinNames() ?? ["USDC_BTC"]
         lineChartDataSets = Array(repeating: LineChartData(), count: nameArray.count)
+        coinNameToIndex.removeAll()
         for i in 0..<nameArray.count {
             coinNameToIndex[nameArray[i]] = i
         }
