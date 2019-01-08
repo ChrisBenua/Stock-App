@@ -9,10 +9,16 @@
 import Foundation
 import Alamofire
 
+protocol OmniApiHelperOperationsFailed {
+    func showApiAlertController(text : String)
+}
+
 class OmniAPIHelper {
     public static var UrlBalance = "https://api.omniexplorer.info/v1/address/addr/"
     public static var UrlTransaction = "https://api.omniexplorer.info/v1/transaction/address"
     public static var shared = OmniAPIHelper()
+    
+    var delegate : OmniApiHelperOperationsFailed?
     
     func fetchUsersWalletData(address : String, completionHandler: @escaping (_ : UserInfo) -> ()) {
         if (address.isEmpty) {
@@ -21,16 +27,22 @@ class OmniAPIHelper {
         Alamofire.request(OmniAPIHelper.UrlBalance, method: .post, parameters: ["addr" : address]).responseJSON { (resp) in
             print(resp)
             guard let dict = resp.result.value as? [String : Any] else {
-                completionHandler(UserInfo(name: "ERROR", balance: [CoinBalance]()))
                 return
             }
             do {
                 let data : Data = try JSONSerialization.data(withJSONObject : dict)
-                var item = try JSONDecoder().decode(UserInfo.self, from: data)
+                var item : UserInfo = UserInfo()
+                item = try JSONDecoder().decode(UserInfo.self, from: data)
+                
                 item.name = address
+                if (item.balance.count == 1 && item.balance.first?.Value == 0) {
+                    self.delegate?.showApiAlertController(text : "Something wrong with your Wallet Id")
+                    return
+                }
                 completionHandler(item)
             } catch let err {
                 print("OMNI  fetch   ", err)
+                self.delegate?.showApiAlertController(text : "Something wrong with your Wallet Id")
             }
             
         }
@@ -60,6 +72,9 @@ class OmniAPIHelper {
             do {
                 let data : Data = try JSONSerialization.data(withJSONObject : dict)
                 var items = try JSONDecoder().decode(TransactionSearchResult.self, from: data)
+                if (items.transactions.count == 0) {
+                    self.delegate?.showApiAlertController(text: "There are no transactions, check your Wallet ID")
+                }
                 completionHandler(items.transactions)
             } catch let err {
                 print("error in parsing Transaction", err)

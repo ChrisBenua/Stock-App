@@ -33,6 +33,7 @@ class UserInfoCollectionViewController : UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        OmniAPIHelper.shared.delegate = self
         let refreshControl = UIRefreshControl()
         navigationItem.title = "Your Wallet"
         self.navigationController?.navigationBar.barStyle = .black
@@ -45,7 +46,6 @@ class UserInfoCollectionViewController : UICollectionViewController {
         collectionView.register(TransactionCollectionViewCell.self, forCellWithReuseIdentifier: TransactionCollectionViewCell.cellId1)
         navigationItem.rightBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "settings").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(toggleSettings))]
         fetchUserData(userId: nil)
-        fetchUserTransaction(userId: nil)
     }
     
     @objc func toggleSettings() {
@@ -103,21 +103,22 @@ class UserInfoCollectionViewController : UICollectionViewController {
 
 //MARK:- API
 extension UserInfoCollectionViewController {
+    
+    func showAlertController(text : String) {
+        let alertController = UIAlertController(title: "Error", message: text, preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "Get it!", style: .destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func fetchUserData(userId : String?) {
         var name = userId ?? ""
         if (name.isEmpty) {
             name = UserDefaults.standard.getOmniId() ?? Configuration.defaultUserId
         }
         OmniAPIHelper.shared.fetchUsersWalletData(address: name) { (us) in
-            if (us.name != "ERROR") {
-                self.user = us
-                UserDefaults.standard.saveOmniId(id: us.name)
-            } else {
-                let alertController = UIAlertController(title: "Error", message: "Something wrong with your wallet id", preferredStyle: UIAlertController.Style.alert)
-                let okAction = UIAlertAction(title: "Get it!", style: .destructive)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
+            self.user = us
+            UserDefaults.standard.saveOmniId(id: us.name)
         }
     }
     
@@ -167,8 +168,18 @@ extension UserInfoCollectionViewController : UICollectionViewDelegateFlowLayout 
 extension UserInfoCollectionViewController : UserProfileProvidedDataTypeChanged {
     func handleDataTypeChanged(type: UserProfileProvidedDataTypeEnum) {
         currLayout = type
+        if (type == .transactions && transaction.count == 0) {
+            fetchUserTransaction(userId: nil)
+        }
     }
     
+    
+}
+
+extension UserInfoCollectionViewController : OmniApiHelperOperationsFailed {
+    func showApiAlertController(text : String) {
+        self.showAlertController(text : text)
+    }
     
 }
 

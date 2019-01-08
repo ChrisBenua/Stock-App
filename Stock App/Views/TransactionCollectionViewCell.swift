@@ -26,7 +26,12 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
             toLabel.text = transaction.to
             fromLabel.text = transaction.from
             typeLabel.text = "Type : " + transaction.type
-            amountLabel.text = String.init(format: "%.4f", transaction.Amount) + " \(transaction.coinName)"
+            if (transaction.Amount >= 10000) {
+                amountLabel.text = String.init(format: "%.0f", transaction.Amount) + " \(transaction.coinName)"
+            } else {
+                amountLabel.text = String.init(format: "%.4f", transaction.Amount) + " \(transaction.coinName)"
+            }
+            
             amountLabel.widthAnchor.constraint(equalToConstant: amountLabel.sizeThatFits(CGSize(width: 200, height: 50)).width + 3).isActive = true
             
             dateLabel.text = "Date: " + DateFormatter.MMddDateFormatter(format: "MM/dd/yy").string(from: Date(timeIntervalSince1970: transaction.blockTime))
