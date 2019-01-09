@@ -115,6 +115,12 @@ extension UserInfoCollectionViewController {
         var name = userId ?? ""
         if (name.isEmpty) {
             name = UserDefaults.standard.getOmniId() ?? Configuration.defaultUserId
+            if (name == Configuration.defaultUserId) {
+                let alertController = UIAlertController(title: "Specify your wallet id", message: "Press settings button and enter your wallet id(Omni explorer id)", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Get it!", style: .destructive)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
         }
         OmniAPIHelper.shared.fetchUsersWalletData(address: name) { (us) in
             self.user = us

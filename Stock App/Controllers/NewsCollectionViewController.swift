@@ -148,7 +148,7 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
             finalText = text
         }
         AddActivityIndicator()
-        APIHelper.shared.fetchAllNews(luceneParams: ["text" : finalText, "website.domainName" : "(bloomberg.com OR marketwatch.com OR cointelegraph.com)"], luceneLogicParams: ["AND"], simpleParams: ["sortBy" : "discoverDate", "sortOrder" : "DESC"], completionHandler: { (res) in
+        APIHelper.shared.fetchAllNews(luceneParams: ["text" : finalText, "website.domainName" : "(coindesk.com OR cointelegraph.com)"], luceneLogicParams: ["AND"], simpleParams: ["sortBy" : "discoverDate", "sortOrder" : "DESC"], completionHandler: { (res) in
             self.news = res
             self.collectionView.reloadData()
             self.collectionView.refreshControl?.endRefreshing()

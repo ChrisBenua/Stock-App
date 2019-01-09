@@ -16,15 +16,15 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
     
     var transaction : Transaction! {
         didSet {
-            if (transaction.to == username) {
+            if (transaction.from == username) {
                 toLabel.textColor = UIColor.green
             }
             
-            if (transaction.from == username) {
+            if (transaction.to == username) {
                 fromLabel.textColor = UIColor.green
             }
-            toLabel.text = transaction.to
-            fromLabel.text = transaction.from
+            toLabel.text = transaction.from
+            fromLabel.text = transaction.to
             typeLabel.text = "Type : " + transaction.type
             if (transaction.Amount >= 10000) {
                 amountLabel.text = String.init(format: "%.0f", transaction.Amount) + " \(transaction.coinName)"
@@ -45,6 +45,7 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         label.backgroundColor = UIColor.mainTextLabelColor()
         label.textColor = UIColor.lightText
         label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
     
@@ -55,11 +56,12 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         label.backgroundColor = UIColor.mainTextLabelColor()
         label.textColor = UIColor.lightText
         label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
     
     var typeLabel : PaddingLabel = {
-        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4))
         label.clipsToBounds = true
         label.layer.cornerRadius = 4
         //label.backgroundColor = UIColor.darkGray
@@ -75,7 +77,7 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
     }()
     
     var amountLabel : PaddingLabel = {
-        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 2, bottom: 4, right: 2))
         label.clipsToBounds = true
         label.layer.cornerRadius = 4
         label.backgroundColor = UIColor.mainTextLabelColor()
