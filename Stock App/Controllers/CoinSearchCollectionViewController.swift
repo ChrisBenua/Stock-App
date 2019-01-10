@@ -56,6 +56,15 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView.register(FlatCurrencyCollectionViewCell.self, forCellWithReuseIdentifier: FlatCurrencyCollectionViewCell.cellId)
         
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Help", style: .plain, target: self, action: #selector(handleInfoTap))
+    }
+    
+    @objc func handleInfoTap() {
+        let alertController = UIAlertController(title: "About search", message: "1) All search letters should be capital\n 2) Format: Search query should be like USDC_BTC: BTC price in USDC currency", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Get it!", style: .destructive, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     lazy var customHeaderView : UIView = {

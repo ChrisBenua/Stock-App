@@ -194,7 +194,7 @@ extension NewsCollectionViewController {
         self.news = [NewsItem]()
         collectionView.reloadData()
         self.view.addSubview(activityIndicator)
-        activityIndicator.frame.origin.y = 40 + (navigationController?.navigationBar.frame.height ?? 0) + (searchController.searchBar.frame.height)//40 because of status bar and uncollapsing bar
+        activityIndicator.frame.origin.y = 45 + (navigationController?.navigationBar.frame.height ?? 0) + (searchController.searchBar.frame.height)//45 because of status bar and uncollapsing bar
         //center it
         activityIndicator.frame.origin.x = view.frame.width / 2 - activityIndicator.frame.width / 2
         activityIndicator.startAnimating()
