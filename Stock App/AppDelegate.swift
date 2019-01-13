@@ -9,6 +9,18 @@
 import UIKit
 import CoreData
 
+class CustomNavigationController : UINavigationController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        definesPresentationContext = true
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,11 +30,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        
         UITabBar.appearance().barTintColor = UIColor.mainBlackColor()
         UINavigationBar.appearance().prefersLargeTitles = true
-        
+        UINavigationBar.appearance().barTintColor = UIColor.init(red: 15/255, green: 20/255, blue: 20/255, alpha: 1.0)
+        UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().isTranslucent = false
+        UISearchBar.appearance().tintColor = .white
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
         
         let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)]
@@ -32,11 +48,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         window?.makeKeyAndVisible()
-        var tabBar = CommonTabBarController()
-        let nav = UINavigationController(rootViewController: tabBar)
-        nav.isNavigationBarHidden = true
-        nav.navigationBar.isUserInteractionEnabled = false
-        window?.rootViewController = nav
+        let tabBar = CommonTabBarController()
+        //let nav = CustomNavigationController(rootViewController: tabBar)
+        //nav.isNavigationBarHidden = true
+        //nav.navigationBar.isUserInteractionEnabled = false
+        window?.rootViewController = tabBar
 
         return true
     }

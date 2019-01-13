@@ -36,8 +36,6 @@ class UserInfoCollectionViewController : UICollectionViewController {
         OmniAPIHelper.shared.delegate = self
         let refreshControl = UIRefreshControl()
         navigationItem.title = "Your Wallet"
-        self.navigationController?.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.isTranslucent = true
         refreshControl.tintColor = .white
         collectionView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(toggleRefresh), for: .valueChanged)

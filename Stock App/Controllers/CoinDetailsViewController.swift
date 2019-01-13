@@ -59,7 +59,6 @@ class CoinDetailViewController : UICollectionViewController {
         let names = UserDefaults.standard.getFavoriteCoinNames() ?? [String]()
         isFavorite = names.contains(coinName)
         //view.addSubview(scrollView)
-        self.navigationController?.navigationBar.barStyle = .black
         self.navigationItem.title = coinName
         //self.navigationItem.rightBarButtonItem
         UserDefaults.standard.addToRecentCoinNames(newName: coinName)

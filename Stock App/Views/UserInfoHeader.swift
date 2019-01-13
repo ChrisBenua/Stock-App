@@ -53,7 +53,7 @@ class UserInfoHeader : UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(userNameTitle)
         contentView.addSubview(segmentControl)
-        userNameTitle.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: segmentControl.topAnchor, right: contentView.rightAnchor, paddingTop: 4, paddingLeft: 16, paddingBottom: 10, paddingRight: 16, width: 0, height: 0)
+        userNameTitle.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: segmentControl.topAnchor, right: contentView.rightAnchor, paddingTop: 4, paddingLeft: 13, paddingBottom: 10, paddingRight: 13, width: 0, height: 0)
         segmentControl.anchor(top: userNameTitle.bottomAnchor, left: nil, bottom: contentView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 8, paddingRight: 0, width: 300, height: 0)
         segmentControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }

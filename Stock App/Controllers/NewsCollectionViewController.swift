@@ -10,6 +10,18 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
+
+class CustomSearchController : UISearchController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+}
+
 class NewsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     ///Pull to refresh control
     var refresher : UIRefreshControl!
@@ -24,7 +36,7 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
     var foundedZero = false
     
     ///SearchController for searching news
-    let searchController = UISearchController(searchResultsController: nil)
+    let searchController = CustomSearchController(searchResultsController: nil)
     
     /// NewsItem DataSource
     var news = [NewsItem]()
@@ -33,14 +45,20 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         super.viewDidAppear(animated)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         PoloniexAPIHelper.fetchNames { (data) in
             CoinSearchCollectionViewController.coinNames = data
         }
         
-        
+        self.edgesForExtendedLayout = []
         collectionView.backgroundColor = UIColor.mainBlackColor()
         collectionView.alwaysBounceVertical = true
         // Uncomment the following line to preserve selection between presentations
@@ -48,8 +66,7 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
 
         // Register cell classes
         
-        self.navigationController?.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.isTranslucent = true
+        //self.navigationController?.navigationBar.barStyle = .black
         self.collectionView!.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.navigationController?.navigationBar.topItem?.title = "News"
         //Because of tabbar
@@ -165,10 +182,14 @@ extension NewsCollectionViewController : UISearchBarDelegate {
     fileprivate func setUpSearchBar() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+        self.definesPresentationContext = true
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Enter text to search"
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

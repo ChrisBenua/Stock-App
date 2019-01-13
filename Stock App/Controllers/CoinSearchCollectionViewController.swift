@@ -42,13 +42,15 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         searchController.searchBar.placeholder = "Enter coin to search"
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addCustomHeader()
         searchedNames = CoinSearchCollectionViewController.coinNames
         collectionView.backgroundColor = UIColor.mainBlackColor()
-        navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.topItem?.title = "Search"
 
         setUpSearchBar()
@@ -144,7 +146,7 @@ extension CoinSearchCollectionViewController {
     func addCustomHeader() {
         if (customHeaderView.superview == nil) {
             view.addSubview(customHeaderView)
-            customHeaderView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 200, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
+            customHeaderView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
         }
     }
     func removeCustomHeader() {
