@@ -33,12 +33,13 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
             }
             
             amountLabel.widthAnchor.constraint(equalToConstant: amountLabel.sizeThatFits(CGSize(width: 200, height: 50)).width + 3).isActive = true
-            let val = max(toLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width, fromLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width)
+            /*let val = max(toLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width, fromLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width)
+            
             print("Width : \(val)")
             
             toLabel.widthAnchor.constraint(equalToConstant: val).isActive = true
             
-            fromLabel.widthAnchor.constraint(equalToConstant: val).isActive = true
+            fromLabel.widthAnchor.constraint(equalToConstant: val).isActive = true*/
             
             dateLabel.text = "Date: " + DateFormatter.MMddDateFormatter(format: "MM/dd/yy").string(from: Date(timeIntervalSince1970: transaction.blockTime))
         }
@@ -51,7 +52,9 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         label.backgroundColor = UIColor.mainTextLabelColor()
         label.textColor = UIColor.lightText
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.adjustsFontSizeToFitWidth = true
+
         return label
     }()
     
@@ -62,7 +65,8 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         label.backgroundColor = UIColor.mainTextLabelColor()
         label.textColor = UIColor.lightText
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -111,14 +115,14 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         
         typeLabel.anchor(top: mainCellView.topAnchor, left: mainCellView.leftAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         
-        fromLabel.anchor(top: typeLabel.bottomAnchor, left: nil, bottom: downArrowImageView.topAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
-        fromLabel.centerXAnchor.constraint(equalTo: mainCellView.centerXAnchor).isActive = true
+        fromLabel.anchor(top: typeLabel.bottomAnchor, left: typeLabel.leftAnchor, bottom: downArrowImageView.topAnchor, right: mainCellView.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        //fromLabel.centerXAnchor.constraint(equalTo: mainCellView.centerXAnchor).isActive = true
         
         downArrowImageView.anchor(top: nil, left: nil, bottom: toLabel.topAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 4, paddingRight: 0, width: 50, height: 0)
         downArrowImageView.centerXAnchor.constraint(equalTo: fromLabel.centerXAnchor).isActive = true
         
-        toLabel.anchor(top: nil, left: nil, bottom: mainCellView.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
-        toLabel.centerXAnchor.constraint(equalTo: mainCellView.centerXAnchor).isActive = true
+        toLabel.anchor(top: nil, left: mainCellView.leftAnchor, bottom: mainCellView.bottomAnchor, right: mainCellView.rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        //toLabel.centerXAnchor.constraint(equalTo: mainCellView.centerXAnchor).isActive = true
         
         amountLabel.anchor(top: mainCellView.topAnchor, left: typeLabel.rightAnchor, bottom: fromLabel.topAnchor, right: mainCellView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
         
