@@ -32,6 +32,7 @@ class PaddingLabel: UILabel {
         super.init(coder: aDecoder)
     }
     
+    /// Draws text in rect with insets
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: padding))
     }

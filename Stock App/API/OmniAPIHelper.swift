@@ -14,12 +14,23 @@ protocol OmniApiHelperOperationsFailed {
 }
 
 class OmniAPIHelper {
+    ///URL for API call to get user's balance
     public static var UrlBalance = "https://api.omniexplorer.info/v1/address/addr/"
+    
+    ///URL for API call to get user's transactions
     public static var UrlTransaction = "https://api.omniexplorer.info/v1/transaction/address"
+    
+    ///Singleton object
     public static var shared = OmniAPIHelper()
     
+    ///Delegate for handling errors in API calls
     var delegate : OmniApiHelperOperationsFailed?
     
+    /**
+     Fetches from OmniAPI info about currencies user has
+     - Parameter address : User's wallet id
+     - Parameter completionHandler: Function for dealing with fetched data from outside of APIHelper
+    */
     func fetchUsersWalletData(address : String, completionHandler: @escaping (_ : UserInfo) -> ()) {
         if (address.isEmpty) {
             return
@@ -57,6 +68,12 @@ class OmniAPIHelper {
         task.resume()*/
     }
     
+    /**
+     Fetches User's transaction
+     - Parameter address: User's wallet id
+     - Parameter page: Which transaction page should be fetched
+     - Parameter completionHandler: Function to deal with API call results outside of API Helper
+     */
     func fetchUsersTransactions(address : String, page : Int, completionHandler : @escaping (_ : [Transaction]) -> ()) {
         if address.isEmpty {
             return
@@ -67,11 +84,11 @@ class OmniAPIHelper {
                 print("Error fetching transactions ", err)
             }
             print(response)
-            //TODO : make here completion handler with error
+            
             guard let dict = response.result.value as? [String : Any] else { return }
             do {
                 let data : Data = try JSONSerialization.data(withJSONObject : dict)
-                var items = try JSONDecoder().decode(TransactionSearchResult.self, from: data)
+                let items = try JSONDecoder().decode(TransactionSearchResult.self, from: data)
                 if (items.transactions.count == 0) {
                     self.delegate?.showApiAlertController(text: "There are no transactions, check your Wallet ID")
                 }

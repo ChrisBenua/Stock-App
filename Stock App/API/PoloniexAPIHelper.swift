@@ -21,6 +21,7 @@ class PoloniexAPIHelper {
      return data for date at 4am in UTC
      - Parameter params : ["currencyPair" : `name of CryptoCoin`], ["start" : `startTimeStam]`, ["end" : `endTimeStamp], ["period" : `period of data fetching`]
      period can be only 300, 900, 1800, 7200, 14400, and 86400
+     - Parameter completionHandler : fucntion, that deals with fetched data
     */
     static func fetchCurrencyData(params : [String : Any], completionHandler: @escaping (_ : [CoinData]) -> ()) {
         //add command=returnChartData to our query

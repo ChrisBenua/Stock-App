@@ -11,15 +11,19 @@ import UIKit
 
 
 class CoinSearchCollectionViewController : UICollectionViewController {
+    /// All coins names, fetched in NewsCollectionController
     public static var coinNames = [String]()
-    var allCoins : [Coin] = [Coin]()
+    /// Last fetch for coin name
     var fetchDate : [String : Int64] = [String : Int64]()
+    /// Points whether coin with following name was fetched or not
     var alreadyFetched : [String : Coin] = [String : Coin]()
+    /// DataSource for collection view
     var searchedCoins : [Coin] = [Coin]() {
         didSet {
             
         }
     }
+    
     var searchedNames : [String]! {
         didSet {
             for el in searchedNames {
@@ -30,7 +34,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
     }
     
     let searchController = UISearchController(searchResultsController: nil)
-    ///not to spam with queries, we will get banned
+    ///timer to delay queries, not to spam with them, we will get banned
     var timer : Timer?
 
     override func viewDidAppear(_ animated: Bool) {
@@ -69,6 +73,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    ///View to represent message, that nothing was found
     lazy var customHeaderView : UIView = {
         let v = UIView()
         let label = UILabel()
@@ -143,6 +148,7 @@ extension CoinSearchCollectionViewController : UISearchBarDelegate {
 //MARK:- Custom Header
 
 extension CoinSearchCollectionViewController {
+    ///Nothing Found
     func addCustomHeader() {
         if (customHeaderView.superview == nil) {
             view.addSubview(customHeaderView)

@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 extension UIView {
+    ///Leaves no constraints for current view
     func removeAllConstraints() {
         for el in self.constraints {
             self.removeConstraint(el)

@@ -9,6 +9,7 @@
 import Foundation
 
 extension Int64 {
+    /// Gets Current Unix Time Stamp 
     static func currentTimeStamp() -> Int64 {
         return Int64(Date().timeIntervalSince1970)
     }

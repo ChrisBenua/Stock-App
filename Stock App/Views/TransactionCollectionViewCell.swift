@@ -16,15 +16,15 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
     
     var transaction : Transaction! {
         didSet {
-            if (transaction.from == username) {
+            if (transaction.to == username) {
                 toLabel.textColor = UIColor.green
             }
             
-            if (transaction.to == username) {
+            if (transaction.from == username) {
                 fromLabel.textColor = UIColor.green
             }
-            toLabel.text = transaction.from
-            fromLabel.text = transaction.to
+            fromLabel.text = transaction.from
+            toLabel.text = transaction.to
             typeLabel.text = "Type : " + transaction.type
             if (transaction.Amount >= 10000) {
                 amountLabel.text = String.init(format: "%.0f", transaction.Amount) + " \(transaction.coinName)"
@@ -33,6 +33,12 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
             }
             
             amountLabel.widthAnchor.constraint(equalToConstant: amountLabel.sizeThatFits(CGSize(width: 200, height: 50)).width + 3).isActive = true
+            let val = max(toLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width, fromLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width)
+            print("Width : \(val)")
+            
+            toLabel.widthAnchor.constraint(equalToConstant: val).isActive = true
+            
+            fromLabel.widthAnchor.constraint(equalToConstant: val).isActive = true
             
             dateLabel.text = "Date: " + DateFormatter.MMddDateFormatter(format: "MM/dd/yy").string(from: Date(timeIntervalSince1970: transaction.blockTime))
         }
@@ -50,7 +56,7 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
     }()
     
     var fromLabel : PaddingLabel = {
-        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 8))
         label.clipsToBounds = true
         label.layer.cornerRadius = 4
         label.backgroundColor = UIColor.mainTextLabelColor()
@@ -105,12 +111,14 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         
         typeLabel.anchor(top: mainCellView.topAnchor, left: mainCellView.leftAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         
-        fromLabel.anchor(top: typeLabel.bottomAnchor, left: typeLabel.leftAnchor, bottom: downArrowImageView.topAnchor, right: mainCellView.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        fromLabel.anchor(top: typeLabel.bottomAnchor, left: nil, bottom: downArrowImageView.topAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        fromLabel.centerXAnchor.constraint(equalTo: mainCellView.centerXAnchor).isActive = true
         
         downArrowImageView.anchor(top: nil, left: nil, bottom: toLabel.topAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 4, paddingRight: 0, width: 50, height: 0)
         downArrowImageView.centerXAnchor.constraint(equalTo: fromLabel.centerXAnchor).isActive = true
         
-        toLabel.anchor(top: nil, left: mainCellView.leftAnchor, bottom: mainCellView.bottomAnchor, right: mainCellView.rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        toLabel.anchor(top: nil, left: nil, bottom: mainCellView.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        toLabel.centerXAnchor.constraint(equalTo: mainCellView.centerXAnchor).isActive = true
         
         amountLabel.anchor(top: mainCellView.topAnchor, left: typeLabel.rightAnchor, bottom: fromLabel.topAnchor, right: mainCellView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
         

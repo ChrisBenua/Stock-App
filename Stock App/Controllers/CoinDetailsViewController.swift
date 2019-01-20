@@ -11,8 +11,9 @@ import UIKit
 import Charts
 
 class CoinDetailViewController : UICollectionViewController {
-    
+    /// was this coin marked as favourite by user
     private var isFavorite : Bool = false
+
     
     var delegate : UpdateDetailsViewControllerDelegate?
     
@@ -42,6 +43,7 @@ class CoinDetailViewController : UICollectionViewController {
         }
     }
     
+    ///Switches image of star, if user clicked on favourite button
     fileprivate func switchImage() {
         if (isFavorite) {
             navigationItem.rightBarButtonItems?.first?.image = UIImage(imageLiteralResourceName: "starUnselected").withRenderingMode(.alwaysOriginal)

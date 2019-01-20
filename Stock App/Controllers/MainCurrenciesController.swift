@@ -8,12 +8,39 @@ import UIKit
 import Charts
 
 class MainCurrenciesController : UIViewController {
-    /// We should fetch it from database(CoreData)
+    /// Currencies, that user has explored recently
     var recentCurrencies = [Coin]()
-    var chart : LineChartView = LineChartView()
+    
+    ///Chart View to represent graph of current currency
+    lazy var chart : LineChartView = {
+       let chart = LineChartView()
+        chart.gridBackgroundColor = UIColor.mainTextLabelColor()
+        chart.drawGridBackgroundEnabled = true
+        chart.backgroundColor = UIColor.mainTitleLabelColor()
+        chart.legend.textColor = .white
+        chart.autoScaleMinMaxEnabled = true
+        chart.xAxis.labelTextColor = .white
+        chart.leftAxis.labelTextColor = .white
+        chart.rightAxis.labelTextColor = .white
+        chart.xAxis.drawGridLinesEnabled = false
+        chart.leftAxis.drawGridLinesEnabled = false
+        chart.rightAxis.drawGridLinesEnabled = false
+        chart.xAxis.drawAxisLineEnabled = false
+        //chart.leftAxis.drawAxisLineEnabled = false
+        //chart.rightAxis.drawAxisLineEnabled = false
+        chart.leftAxis.drawLabelsEnabled = false
+        
+        chart.xAxis.valueFormatter = TimestampToDateAxisValueFormatter()
+        return chart
+    }()
+    
+    ///LineChartData for every favourite currency
     var lineChartDataSets = [LineChartData]()
+    
+    ///Dict for saving order after API async calls
     var coinNameToIndex = [String : Int]()
     
+    ///Current Index of  LineChartData to be displayed on chart
     var index : Int = 0 {
         didSet {
             if (index < 0) {
@@ -34,7 +61,8 @@ class MainCurrenciesController : UIViewController {
         label.textColor = .white
         return label
     }()
-
+    
+    ///UIView-container for chart
     let graphView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.mainTitleLabelColor()
@@ -52,6 +80,7 @@ class MainCurrenciesController : UIViewController {
         return label
     }()
 
+    ///Horizontal collection view to represent currencies, that user explored recently
     lazy var recentlyUsedCollectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -79,24 +108,6 @@ class MainCurrenciesController : UIViewController {
     
     ///All anchors and another stuff set up
     fileprivate func layoutSetUp() {
-        chart.gridBackgroundColor = UIColor.mainTextLabelColor()
-        chart.drawGridBackgroundEnabled = true
-        chart.backgroundColor = UIColor.mainTitleLabelColor()
-        chart.legend.textColor = .white
-        chart.autoScaleMinMaxEnabled = true
-        chart.xAxis.labelTextColor = .white
-        chart.leftAxis.labelTextColor = .white
-        chart.rightAxis.labelTextColor = .white
-        chart.xAxis.drawGridLinesEnabled = false
-        chart.leftAxis.drawGridLinesEnabled = false
-        chart.rightAxis.drawGridLinesEnabled = false
-        chart.xAxis.drawAxisLineEnabled = false
-        //chart.leftAxis.drawAxisLineEnabled = false
-        //chart.rightAxis.drawAxisLineEnabled = false
-        chart.leftAxis.drawLabelsEnabled = false
-        
-        chart.xAxis.valueFormatter = TimestampToDateAxisValueFormatter()
-        
         let swipe = UIPanGestureRecognizer(target: self, action: #selector(handleLeftSwipe(_:)))
         chart.addGestureRecognizer(swipe)
         let doubleClick = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
@@ -118,13 +129,15 @@ class MainCurrenciesController : UIViewController {
         //recentlyUsedCollectionView.layoutMargins.left = 20
     }
     
+    ///Handling double tap on chart, opens CoinDetailViewController
     @objc func doubleTapped() {
         let cv = CoinDetailViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        guard let names = UserDefaults.standard.getFavoriteCoinNames() else { return }
+        let names = UserDefaults.standard.getFavoriteCoinNames() ?? ["USDC_BTC"]
         cv.coinName = names[index]
         navigationController?.pushViewController(cv, animated: true)
     }
     
+    ///Handles Right and Left Swipe to iterate through favourites currencies
     @objc func handleLeftSwipe(_ sender:UIPanGestureRecognizer) {
         print("Left Swipe")
         if sender.state == .changed {
@@ -173,11 +186,7 @@ class MainCurrenciesController : UIViewController {
             }
         }
     }
-    
-    @objc func handleRightSwipe(_ sender:UISwipeGestureRecognizer) {
-        print("Right Swipe")
-    }
-    
+    ///fetches Recently explored currencies and makes an API call
     func fetchCoinsData() {
         var recentCoinsNames = String.getCoinsNames()
         if (recentCoinsNames.isEmpty) {
@@ -257,6 +266,7 @@ extension MainCurrenciesController : UICollectionViewDelegateFlowLayout {
 
 ///MARK:- Charts
 extension  MainCurrenciesController {
+    ///Creates LineChartDatas from an API callto fill chart
     func fetchFavoriteCoinData(numberOfDays : Int64) {
         let nameArray = UserDefaults.standard.getFavoriteCoinNames() ?? ["USDC_BTC"]
         lineChartDataSets = Array(repeating: LineChartData(), count: nameArray.count)

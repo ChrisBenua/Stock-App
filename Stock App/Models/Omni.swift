@@ -7,24 +7,28 @@
 //
 
 import Foundation
-
+///Class to decode search result(because array of transaction will be inside of common json object, so that's why we need certain container)
 class TransactionSearchResult : Decodable {
+    ///Transactions, that contain JSON object from API call
     var transactions : [Transaction]!
 }
 
+///Class that represents OMNI layer transaction
 class Transaction : Decodable {
-    
+    ///How much value was transfered(converts string to double)
     var Amount : Double {
         get {
             return Double.init(amount)!
         }
     }
-    
     var amount : String
+    /// what currency transaction had
     var coinName : String
-    
+    /// Type of transaction
     var type : String
+    /// from whom currency was transfered
     var from : String
+    /// to whom currency was transeferd
     var to : String
     var blockTime : Double
     
@@ -50,8 +54,8 @@ class Transaction : Decodable {
         case amount = "amount"
         case coinName = "propertyname"
         case type = "type"
-        case from = "referenceaddress"
-        case to = "sendingaddress"
+        case from = "sendingaddress"
+        case to = "referenceaddress"
         case blockTime = "blocktime"
     }
     required init?(coder aDecoder : Decoder) {
@@ -75,8 +79,11 @@ class Transaction : Decodable {
     }
 }
 
+///Class that describes user balance
 class UserInfo : Decodable {
+    ///user's wallet id
     var name : String!
+    /// currencies, that this user owns
     var balance : [CoinBalance]
 
     
@@ -107,16 +114,20 @@ class UserInfo : Decodable {
         }
     }
 }
-
+/// Describes info about currency in user's balance
 class CoinBalance : Decodable {
+    ///Amount of currency user has
     var value : String
+    ///Amount of currency user has
     var Value : Double {
         get {
             return Double(value) ?? 0
         }
     }
+    ///Currency symbol aka id
     var symbol : String
     
+    /// properties this currency has, I will use only it's name
     var properties : PropertyInfo
     
     init(value : String, symbol : String) {
@@ -151,8 +162,9 @@ class CoinBalance : Decodable {
         }
     }
 }
-
+///class to  describe info about currency
 class PropertyInfo : Decodable {
+    ///full coin name
     var propertyName : String
     
     init(name : String) {

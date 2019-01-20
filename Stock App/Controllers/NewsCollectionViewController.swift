@@ -89,17 +89,6 @@ class NewsCollectionViewController: UICollectionViewController, UICollectionView
         collectionView.reloadData()
         fetchNews(text: searchController.searchBar.text!)
     }
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK:- UICollectionViewDataSource
 
@@ -208,7 +197,7 @@ extension NewsCollectionViewController : UISearchBarDelegate {
     
 }
 
-//MARK:- ActivityIndocator
+//MARK:- ActivityIndicator
 ///Show and hide activity indicator
 extension NewsCollectionViewController {
     fileprivate func AddActivityIndicator() {

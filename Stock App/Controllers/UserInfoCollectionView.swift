@@ -19,15 +19,19 @@ class UserInfoCollectionViewController : UICollectionViewController {
     
     var user : UserInfo = UserInfo() {
         didSet {
-            collectionView.reloadData()
-            collectionView.refreshControl?.endRefreshing()
+            if (currLayout == .balance) {
+                collectionView.reloadData()
+                collectionView.refreshControl?.endRefreshing()
+            }
         }
     }
     
     var transaction : [Transaction] = [Transaction]() {
         didSet {
-            collectionView.reloadData()
-            collectionView.refreshControl?.endRefreshing()
+            if (currLayout == .transactions) {
+                collectionView.reloadData()
+                collectionView.refreshControl?.endRefreshing()
+            }
         }
     }
     
@@ -68,6 +72,7 @@ class UserInfoCollectionViewController : UICollectionViewController {
     
     @objc func toggleRefresh() {
         fetchUserData(userId: UserDefaults.standard.getOmniId() ?? "")
+        fetchUserTransaction(userId: nil)
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -101,7 +106,10 @@ class UserInfoCollectionViewController : UICollectionViewController {
 
 //MARK:- API
 extension UserInfoCollectionViewController {
-    
+    /**
+     Show error alert Controller
+     - Parameter text: message in alert Controller
+    */
     func showAlertController(text : String) {
         let alertController = UIAlertController(title: "Error", message: text, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "Get it!", style: .destructive)
@@ -109,6 +117,10 @@ extension UserInfoCollectionViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    /**
+    Fetches user's balance with an API call
+     - Parameter userId: user's wallet id
+     */
     func fetchUserData(userId : String?) {
         var name = userId ?? ""
         if (name.isEmpty) {
@@ -126,6 +138,10 @@ extension UserInfoCollectionViewController {
         }
     }
     
+    /**
+     Fetches user's transactions
+     - Parameter userId: user's wallet id
+     */
     func fetchUserTransaction(userId : String?) {
         var name = userId ?? ""
         if (name.isEmpty) {
@@ -170,6 +186,7 @@ extension UserInfoCollectionViewController : UICollectionViewDelegateFlowLayout 
 }
 
 extension UserInfoCollectionViewController : UserProfileProvidedDataTypeChanged {
+    /// If user switch transactions to balance or vice versa
     func handleDataTypeChanged(type: UserProfileProvidedDataTypeEnum) {
         currLayout = type
         if (type == .transactions && transaction.count == 0) {
@@ -181,6 +198,7 @@ extension UserInfoCollectionViewController : UserProfileProvidedDataTypeChanged 
 }
 
 extension UserInfoCollectionViewController : OmniApiHelperOperationsFailed {
+    /// Shows alert controller if error happened in API call
     func showApiAlertController(text : String) {
         self.showAlertController(text : text)
     }
