@@ -20,8 +20,13 @@ class UserInfoCollectionViewController : UICollectionViewController {
     var user : UserInfo = UserInfo() {
         didSet {
             if (currLayout == .balance) {
-                collectionView.reloadData()
-                collectionView.refreshControl?.endRefreshing()
+                CATransaction.begin()
+                CATransaction.setCompletionBlock { () -> Void in
+                    self.collectionView.reloadData()
+                }
+                
+                self.collectionView.refreshControl?.endRefreshing()
+                CATransaction.commit()
             }
         }
     }
@@ -29,8 +34,14 @@ class UserInfoCollectionViewController : UICollectionViewController {
     var transaction : [Transaction] = [Transaction]() {
         didSet {
             if (currLayout == .transactions) {
-                collectionView.reloadData()
-                collectionView.refreshControl?.endRefreshing()
+                CATransaction.begin()
+                CATransaction.setCompletionBlock { () -> Void in
+                    self.collectionView.reloadData()
+                }
+                
+                self.collectionView.refreshControl?.endRefreshing()
+                CATransaction.commit()
+
             }
         }
     }
@@ -71,6 +82,8 @@ class UserInfoCollectionViewController : UICollectionViewController {
     }
     
     @objc func toggleRefresh() {
+        collectionView.refreshControl?.beginRefreshing()
+
         fetchUserData(userId: UserDefaults.standard.getOmniId() ?? "")
         fetchUserTransaction(userId: nil)
     }

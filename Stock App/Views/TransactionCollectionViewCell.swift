@@ -12,27 +12,42 @@ import UIKit
 class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
     public static var cellId1 = "cellid1"
     
+    var fromLabelWidthAnchor : NSLayoutConstraint?
+    var toLabelWidthAnchor: NSLayoutConstraint?
+    var valueLabelWidthAnchor: NSLayoutConstraint?
+    
+    
     var username : String!
     
     var transaction : Transaction! {
         didSet {
             if (transaction.to == username) {
                 toLabel.textColor = UIColor.green
+            } else {
+                toLabel.textColor = UIColor.lightText
             }
             
             if (transaction.from == username) {
                 fromLabel.textColor = UIColor.green
+            } else {
+                fromLabel.textColor = UIColor.lightText
             }
+            
+            
             fromLabel.text = transaction.from
             toLabel.text = transaction.to
             typeLabel.text = "Type : " + transaction.type
             if (transaction.Amount >= 10000) {
                 amountLabel.text = String.init(format: "%.0f", transaction.Amount) + " \(transaction.coinName)"
             } else {
-                amountLabel.text = String.init(format: "%.4f", transaction.Amount) + " \(transaction.coinName)"
+                var rounded = (Int)(transaction.Amount)
+                var neededLength = min(6 - "\(rounded)".count, 4)
+                amountLabel.text = String.init(format: "%.\(neededLength)f", transaction.Amount) + " \(transaction.coinName)"
             }
             
-            amountLabel.widthAnchor.constraint(equalToConstant: amountLabel.sizeThatFits(CGSize(width: 200, height: 50)).width + 3).isActive = true
+            valueLabelWidthAnchor =  amountLabel.widthAnchor.constraint(equalToConstant: amountLabel.sizeThatFits(CGSize(width: 200, height: 50)).width + 3)
+            
+            valueLabelWidthAnchor?.isActive = true
             /*let val = max(toLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width, fromLabel.sizeThatFits(CGSize(width: mainCellView.frame.width, height: 20)).width)
             
             print("Width : \(val)")
@@ -103,6 +118,13 @@ class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
         return label
     }()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        fromLabelWidthAnchor?.isActive = false
+        toLabelWidthAnchor?.isActive = false
+        valueLabelWidthAnchor?.isActive = false
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

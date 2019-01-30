@@ -26,9 +26,10 @@ class PoloniexAPIHelper {
     static func fetchCurrencyData(params : [String : Any], completionHandler: @escaping (_ : [CoinData]) -> ()) {
         //add command=returnChartData to our query
         var myparams : [String : Any] = params
-        myparams["command"] = "returnChartData"
-        Alamofire.request(QueryURL, method: .get, parameters: myparams, headers: nil).responseJSON { (resp) in
+        //myparams["command"] = "returnChartData"
+        Alamofire.request(QueryURL + "command=returnChartData", method: .get, parameters: myparams, headers: nil).responseJSON { (resp) in
             //Add checker for status code
+            print(resp.request)
             print(resp.result.value)
             guard let dict = resp.result.value as? [[String : Any]] else { return }
             var items : [CoinData] = [CoinData]()

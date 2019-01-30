@@ -64,8 +64,8 @@ extension UserDefaults {
     
     ///Gets recently explored coin Names from User Defaults
     func getRecentCoinNames() -> [String] {
-        guard let data = UserDefaults.standard.data(forKey: UserDefaults.recentCoinNamesKey) else {return [String]()}
-        guard let names = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String] else { return [String]()}
+        guard let data = UserDefaults.standard.data(forKey: UserDefaults.recentCoinNamesKey) else {return []}
+        guard let names = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String] else { return []}
         return names
     }
     

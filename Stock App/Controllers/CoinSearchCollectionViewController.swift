@@ -173,9 +173,9 @@ extension CoinSearchCollectionViewController {
         addCustomHeader()
         for el in Names {
             var currentCoin : Coin = Coin()
-            print(Int64.currentTimeStamp())
-            print(fetchDate[el]!)
-            print(Int64.currentTimeStamp() - fetchDate[el]!)
+            //print(Int64.currentTimeStamp())
+            //print(fetchDate[el]!)
+            //print(Int64.currentTimeStamp() - fetchDate[el]!)
             if !alreadyFetched[el]!.name.isEmpty && Int64.currentTimeStamp() - fetchDate[el]! < Configuration.expiringDataTime {
                 self.searchedCoins.append(alreadyFetched[el]!)
                 self.removeCustomHeader()

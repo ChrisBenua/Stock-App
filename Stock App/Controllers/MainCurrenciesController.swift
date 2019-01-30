@@ -88,8 +88,19 @@ class MainCurrenciesController : UIViewController {
         collectionView.backgroundColor = UIColor.mainBlackColor()
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         collectionView.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: CurrencyCollectionViewCell.cellId)
+        collectionView.alwaysBounceHorizontal = true
         return collectionView
+    }()
+    
+    lazy var mainScrollViewContainer: UIScrollView = {
+        let sv = UIScrollView()
+        sv.alwaysBounceVertical = true
+        
+        sv.delegate = self
+        sv.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 400, right: 0)
+        return sv
     }()
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +108,10 @@ class MainCurrenciesController : UIViewController {
         self.index = self.index >= UserDefaults.standard.getFavoriteCoinNames()?.count ?? 0 ? 0 : self.index
         fetchCoinsData()
         fetchFavoriteCoinData(numberOfDays: 5)
+        var frame = mainScrollViewContainer.frame
+        frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: view.frame.width, height: frame.height)
+        //mainScrollViewContainer.frame = frame
+        print("Content size", mainScrollViewContainer.contentSize)
     }
     
     override func viewDidLoad() {
@@ -108,6 +123,11 @@ class MainCurrenciesController : UIViewController {
     
     ///All anchors and another stuff set up
     fileprivate func layoutSetUp() {
+        view.addSubview(mainScrollViewContainer)
+        mainScrollViewContainer.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        //mainScrollViewContainer.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, multiplier: 1.2).isActive = true
+        
+        self.automaticallyAdjustsScrollViewInsets = false
         let swipe = UIPanGestureRecognizer(target: self, action: #selector(handleLeftSwipe(_:)))
         chart.addGestureRecognizer(swipe)
         let doubleClick = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
@@ -116,15 +136,15 @@ class MainCurrenciesController : UIViewController {
         
         self.view.backgroundColor = UIColor.mainBlackColor()
         navigationController?.navigationBar.topItem?.title = "All currencies"
-        view.addSubview(favoriteHeader)
-        view.addSubview(graphView)
-        view.addSubview(recentlyUsedLabel)
-        view.addSubview(recentlyUsedCollectionView)
+        mainScrollViewContainer.addSubview(favoriteHeader)
+        mainScrollViewContainer.addSubview(graphView)
+        mainScrollViewContainer.addSubview(recentlyUsedLabel)
+        mainScrollViewContainer.addSubview(recentlyUsedCollectionView)
         graphView.addSubview(chart)
-        favoriteHeader.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 20, paddingBottom: 0, paddingRight: 3, width: 0, height: 40)
-        graphView.anchor(top: favoriteHeader.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 200)
-        recentlyUsedLabel.anchor(top: graphView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 40)
-        recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 170)
+        favoriteHeader.anchor(top: mainScrollViewContainer.topAnchor, left: mainScrollViewContainer.leftAnchor, bottom: nil, right: mainScrollViewContainer.rightAnchor, paddingTop: 5, paddingLeft: 20, paddingBottom: 0, paddingRight: 3, width: 0, height: 40)
+        graphView.anchor(top: favoriteHeader.bottomAnchor, left: mainScrollViewContainer.leftAnchor, bottom: nil, right: mainScrollViewContainer.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: view.frame.width - 40, height: 200)
+        recentlyUsedLabel.anchor(top: graphView.bottomAnchor, left: mainScrollViewContainer.leftAnchor, bottom: nil, right: mainScrollViewContainer.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 40)
+        recentlyUsedCollectionView.anchor(top: recentlyUsedLabel.bottomAnchor, left: mainScrollViewContainer.leftAnchor, bottom: mainScrollViewContainer.bottomAnchor, right: mainScrollViewContainer.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 80, paddingRight: 0, width: 0, height: 170)
         chart.anchor(top: graphView.topAnchor, left: graphView.leftAnchor, bottom: graphView.bottomAnchor, right: graphView.rightAnchor, paddingTop: 10, paddingLeft: 5, paddingBottom: 10, paddingRight: 5, width: 0, height: 0)
         //recentlyUsedCollectionView.layoutMargins.left = 20
     }
@@ -162,10 +182,8 @@ class MainCurrenciesController : UIViewController {
             UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
                 if (translation.x > 50) {
                     self.graphView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
-                    self.index = self.index - 1
                 } else if (translation.x < -50) {
                     self.graphView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
-                    self.index = self.index + 1
                 } else {
                     self.graphView.transform = .identity
                 }
@@ -173,8 +191,12 @@ class MainCurrenciesController : UIViewController {
             }) { (_) in
                 if (translation.x > 50) {
                     self.graphView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    self.index = self.index - 1
+
                 } else if (translation.x < -50) {
                     self.graphView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    self.index = self.index + 1
+
                 } else {
                     self.graphView.transform = .identity
                 }
@@ -296,6 +318,17 @@ extension  MainCurrenciesController {
                 }
                 //self.chart.data = lineData
                 
+            }
+        }
+    }
+}
+
+
+extension MainCurrenciesController : UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (scrollView == self.mainScrollViewContainer) {
+            if abs(scrollView.contentOffset.x) > 0 {
+                scrollView.contentOffset.x = 0
             }
         }
     }
