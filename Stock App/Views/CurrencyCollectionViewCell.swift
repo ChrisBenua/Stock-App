@@ -38,6 +38,7 @@ class CurrencyCollectionViewCell : ShadowCollectionViewCellBase {
         return label
     }()
     
+    ///View update
     func configureCurrentValueLabel() {
         guard let currentTimeStamp = coin.data.last else {return}//Unix time in milisecond
         var prevDayValue : Double = coin.data.last!.close

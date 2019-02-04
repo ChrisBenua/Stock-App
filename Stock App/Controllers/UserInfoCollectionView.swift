@@ -82,7 +82,7 @@ class UserInfoCollectionViewController : UICollectionViewController {
     }
     
     @objc func toggleRefresh() {
-        collectionView.refreshControl?.beginRefreshing()
+        //collectionView.refreshControl?.beginRefreshing()
 
         fetchUserData(userId: UserDefaults.standard.getOmniId() ?? "")
         fetchUserTransaction(userId: nil)

@@ -11,32 +11,31 @@ import UIKit
 import Charts
 
 protocol UpdateDetailsViewControllerDelegate {
+    ///Update Data set for chart
     func setChartData(lineData : LineChartData);
 }
 
 protocol DataSetSizeChangedDelegate {
+    ///Update DetailCollectionViewController if number of days was changed
     func dataSetSizeChanged(numberOfDays : Int);
 }
 
 class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewControllerDelegate {
+    ///Updates chart data
     func setChartData(lineData: LineChartData) {
         chartView.data = lineData
     }
     
     public static let headerId = "headerId"
     var delegate : DataSetSizeChangedDelegate?
+    ///Coin name for header
     var coinName : String! {
         didSet {
             nameHeaderLabel.text = coinName
         }
     }
     
-    var coin : Coin = Coin() {
-        didSet {
-            //self.collectionView.reloadData()
-        }
-    }
-    
+    ///Segmented Control for controlling number of days to present on chart
     lazy var numberOfDaysControl : UISegmentedControl = {
         let sc = UISegmentedControl(items: ["30 days", "15 days", "5 days"])
         sc.selectedSegmentIndex = 2
@@ -45,6 +44,7 @@ class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewContro
         return sc
     }()
     
+    ///Leabel for coin Name
     let nameHeaderLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24)
@@ -52,7 +52,7 @@ class DetailCoinControllerHeader : UICollectionViewCell, UpdateDetailsViewContro
         
         return label
     }()
-    
+    ///Container view for graph
     let graphView : UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.mainTitleLabelColor()

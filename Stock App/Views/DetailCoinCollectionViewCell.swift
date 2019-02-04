@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
-    
+    ///DataSource for this cell
     var coinData : CoinData! {
         didSet {
             dateLabel.text = DateFormatter.MMddDateFormatter(format : "MM-dd-yyyy").string(from: Date(timeIntervalSince1970: TimeInterval(coinData.date)))
@@ -20,7 +20,7 @@ class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
             highLabel.text = "High:\n \(String.init(format: "%.4f", coinData.high))"
         }
     }
-    
+    ///Label for representing date
     let dateLabel : UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -29,7 +29,7 @@ class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
         label.textAlignment = .center
         return label
     }()
-    
+    ///Label for value, when stock opened this day
     let openLabel : UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -38,7 +38,7 @@ class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
         //label.backgroundColor = .red
         return label
     }()
-    
+    ///Label for value, when stock closed this day
     let closeLabel : UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -47,7 +47,7 @@ class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
         label.textAlignment = .center
         return label
     }()
-    
+    ///Label for value, stock has the highest value
     let highLabel : UILabel = {
         let label = UILabel()
         label.textColor = .green
@@ -56,7 +56,7 @@ class DetailCoinCollectionViewCell : ShadowCollectionViewCellBase {
         label.textAlignment = .center
         return label
     }()
-    
+    ///Label for value, stock has the lowest value
     let lowLabel : UILabel = {
         let label = UILabel()
         label.textColor = .red

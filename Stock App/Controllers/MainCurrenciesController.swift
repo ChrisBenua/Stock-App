@@ -53,6 +53,7 @@ class MainCurrenciesController : UIViewController {
         }
     }
     
+    ///Header for favorites views charts
     let favoriteHeader : UILabel = {
        let label = UILabel()
         label.text = "Your Favorite"
@@ -71,6 +72,7 @@ class MainCurrenciesController : UIViewController {
         return view
     }()
 
+    ///Label for recenltyUsedCollectionView
     let recentlyUsedLabel : UILabel = {
        let label = UILabel()
         label.text = "You've recently seen"
@@ -94,6 +96,7 @@ class MainCurrenciesController : UIViewController {
         return collectionView
     }()
     
+    ///main scroll view for making all controller scrollable
     lazy var mainScrollViewContainer: UIScrollView = {
         let sv = UIScrollView()
         sv.alwaysBounceVertical = true

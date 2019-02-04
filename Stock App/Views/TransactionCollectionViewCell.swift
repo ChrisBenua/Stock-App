@@ -11,7 +11,7 @@ import UIKit
 
 class TransactionCollectionViewCell : ShadowCollectionViewCellBase {
     public static var cellId1 = "cellid1"
-    
+    ///Constraint
     var fromLabelWidthAnchor : NSLayoutConstraint?
     var toLabelWidthAnchor: NSLayoutConstraint?
     var valueLabelWidthAnchor: NSLayoutConstraint?

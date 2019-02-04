@@ -14,19 +14,16 @@ class CoinDetailViewController : UICollectionViewController {
     /// was this coin marked as favourite by user
     private var isFavorite : Bool = false
 
-    
+    ///Delegate for handling events from Header
     var delegate : UpdateDetailsViewControllerDelegate?
     
-    func setCoin(coin: Coin) {
-        self.coin = coin
-    }
-    
+    ///Coin's name
     var coinName : String! {
         didSet {
             fetchFavoriteCoinData(numberOfDays: 30, numberOfItemsOnGraph: 5)
         }
     }
-    
+    ///Coin to present info about
     var coin : Coin = Coin() {
         didSet {
             self.collectionView.reloadData()
@@ -83,6 +80,7 @@ class CoinDetailViewController : UICollectionViewController {
         setUpBarButtons()
     }
     
+    ///Refetches data
     @objc func toggleRefresh() {
         self.coin.data.removeAll()
         self.collectionView.reloadData()
@@ -183,6 +181,7 @@ extension CoinDetailViewController {
 //MARK:- DataSetSizeChangedDelegate
 
 extension CoinDetailViewController : DataSetSizeChangedDelegate {
+    ///If we changed number of days to be displayed, refresh header Dataset
     func dataSetSizeChanged(numberOfDays: Int) {
         var data = coin.data
         data.reverse()

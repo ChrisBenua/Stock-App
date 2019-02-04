@@ -22,7 +22,7 @@ class UserInfoHeader : UICollectionViewCell {
     public static let headerId = "headerId"
     
     var delegate : UserProfileProvidedDataTypeChanged?
-    
+    ///Label for userName
     let userNameTitle : PaddingLabel = {
         let label = PaddingLabel(padding: UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10))
         label.textColor = .white
@@ -33,7 +33,7 @@ class UserInfoHeader : UICollectionViewCell {
         label.clipsToBounds = true
         return label
     }()
-    
+    ///Segmented control for handling type of data to be presented
     lazy var segmentControl : UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Balance", "Transactions"])
         sc.selectedSegmentIndex = 0

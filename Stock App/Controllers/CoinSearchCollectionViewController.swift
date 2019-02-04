@@ -23,7 +23,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
             
         }
     }
-    
+    /// Names for coins we search
     var searchedNames : [String]! {
         didSet {
             for el in searchedNames {
@@ -34,6 +34,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
     }
     
     let searchController = UISearchController(searchResultsController: nil)
+    
     ///timer to delay queries, not to spam with them, we will get banned
     var timer : Timer?
 
@@ -66,6 +67,7 @@ class CoinSearchCollectionViewController : UICollectionViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Help", style: .plain, target: self, action: #selector(handleInfoTap))
     }
     
+    ///Handler for info button, opens alert controller with information
     @objc func handleInfoTap() {
         let alertController = UIAlertController(title: "About search", message: "1) All search letters should be capital\n 2) Format: Search query should be like USDC_BTC: BTC price in USDC currency", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Get it!", style: .destructive, handler: nil)
@@ -148,13 +150,15 @@ extension CoinSearchCollectionViewController : UISearchBarDelegate {
 //MARK:- Custom Header
 
 extension CoinSearchCollectionViewController {
-    ///Nothing Found
+    ///Nothing Found adds Nothing Found header
     func addCustomHeader() {
         if (customHeaderView.superview == nil) {
             view.addSubview(customHeaderView)
             customHeaderView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
         }
     }
+    
+    ///Removes NothingFound Header
     func removeCustomHeader() {
         customHeaderView.removeFromSuperview()
     }
@@ -162,6 +166,7 @@ extension CoinSearchCollectionViewController {
 
 //MARK:- API
 extension CoinSearchCollectionViewController {
+    ///fetches coins with 'text' as substring
     func fetchCoinsWithNames(text : String) {
         var Names = self.searchedNames!
         Names = Names.filter({ (str) -> Bool in

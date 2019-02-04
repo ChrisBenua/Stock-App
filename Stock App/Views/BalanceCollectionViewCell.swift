@@ -18,7 +18,7 @@ class BalanceCollectionViewCell : ShadowCollectionViewCellBase {
             valueLabel.text = "Amount:\n"+"\(val)"
         }
     }
-    
+    ///Label for coin Name(Symbol)
     let symbolLabel : UILabel = {
        let label = UILabel()
         label.textColor = UIColor.white
@@ -28,6 +28,7 @@ class BalanceCollectionViewCell : ShadowCollectionViewCellBase {
         return label
     }()
     
+    ///Label for coin value
     let valueLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.lightGray
